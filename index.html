@@ -2073,7 +2073,7 @@
           try {
             // OSRM table servisine ilk sirada Polen Eczanesini koy, arkasina digerlerini ekle
             const coordsStr = `${POLEN_LON},${POLEN_LAT};` + validCoords.map(e => `${e.lon},${e.lat}`).join(';');
-            const osrmUrl = `https://router.project-osrm.org/table/v1/foot/${coordsStr}?sources=0`;
+            const osrmUrl = `https://router.project-osrm.org/table/v1/driving/${coordsStr}?sources=0`;
 
             // Timeout ile fetch
             const controller = new AbortController();
@@ -2090,11 +2090,11 @@
                     e.uzaklik = distMeters / 1000; // Metreyi km'ye cevir
                   }
                 });
-                console.log('OSRM: Gercek yurume rotalari alindi.');
+                console.log('OSRM: Gercek surus rotalari alindi.');
               }
             }
           } catch (err) {
-            console.warn('OSRM yurume rotasi alinamadi, tahmini mesafe kullaniliyor.', err);
+            console.warn('OSRM surus rotasi alinamadi, tahmini mesafe kullaniliyor.', err);
           }
         }
 
