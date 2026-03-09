@@ -8,6 +8,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
   <!-- QR Kod Kütüphanesi -->
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <!-- Leaflet Harita Kütüphanesi -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     :root {
       /* Premium Light & Vibrant Colors */
@@ -384,33 +387,101 @@
       background: rgba(255, 255, 255, 0.2);
     }
 
-    /* ── SCROLL ALANI ── */
+    /* ── DUAL PANEL LAYOUT ── */
     .scroll-area {
       flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
+      overflow: hidden;
       position: relative;
       z-index: 1;
+      display: flex;
+      flex-direction: row;
       padding: var(--s-lg) var(--s-lg) var(--s-xl);
+      gap: var(--s-lg);
     }
 
-    .scroll-area::-webkit-scrollbar {
-      width: 6px
+    .main-col {
+      flex: 7;
+      /* %70 width */
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 12px;
+      display: flex;
+      flex-direction: column;
     }
 
-    .scroll-area::-webkit-scrollbar-track {
-      background: transparent
+    .main-col::-webkit-scrollbar {
+      width: 6px;
     }
 
-    .scroll-area::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 6px
+    .main-col::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .main-col::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 6px;
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(min(100%, 580px), 1fr));
       gap: clamp(14px, 1.6vh, 24px);
+      flex: 1;
+    }
+
+    .side-col {
+      flex: 3;
+      /* %30 width */
+      display: flex;
+      flex-direction: column;
+      gap: clamp(16px, 2vh, 24px);
+    }
+
+    .side-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      padding: clamp(16px, 2vh, 24px);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .side-card h3 {
+      font-size: clamp(20px, 2vw, 26px);
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .side-card p {
+      font-size: clamp(13px, 1.3vw, 16px);
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .takeaway-qr {
+      background: #fff;
+      padding: 12px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      display: inline-flex;
+    }
+
+    #liveMap {
+      flex: 1;
+      width: 100%;
+      min-height: 250px;
+      border-radius: calc(var(--radius) - 4px);
+      border: 1px solid var(--glass-border);
+      z-index: 10;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
     }
 
     /* ── GLASS KART ── */
@@ -1689,11 +1760,27 @@
     </header>
 
     <div class="scroll-area">
-      <div id="status">
-        <div class="si" id="si">⏳</div>
-        <div class="st" id="st">Verilen yükleniyor… (Yaklaşık 3-5 saniye sürebilir)</div>
+      <div class="main-col">
+        <div id="status">
+          <div class="si" id="si">⏳</div>
+          <div class="st" id="st">Verilen yükleniyor… (Yaklaşık 3-5 saniye sürebilir)</div>
+        </div>
+        <div class="grid" id="grid"></div>
       </div>
-      <div class="grid" id="grid"></div>
+
+      <!-- Right Sidebar (QR + Map) -->
+      <div class="side-col">
+        <div class="side-card" style="flex: 0 0 auto;">
+          <h3>📱 Listeyi Telefonuna Al</h3>
+          <p>Dışarıda beklerken zaman kaybetmeyin. Karanlıkta ekranı okumak yerine bu QR kodu okutup listeyi cebinize
+            indirin.</p>
+          <div class="takeaway-qr" id="takeawayQR"></div>
+        </div>
+        <div class="side-card" style="flex: 1; padding: 12px;">
+          <h3 style="margin-bottom:12px; font-size: 18px;">📍 Nöbetçi Haritası</h3>
+          <div id="liveMap"></div>
+        </div>
+      </div>
     </div>
 
     <footer>
@@ -1724,6 +1811,10 @@
             <option value="modern" selected>Modern Renkli</option>
             <option value="classic">Klasik Gece (Koyu)</option>
           </select>
+        </div>
+        <div class="sp-row">
+          <div class="sp-label">Harita ve QR (Sağ Panel)<small>Vitrinde QR ve Canlı Haritayı gösterir</small></div>
+          <label class="toggle"><input type="checkbox" id="sSidebar"><span class="slider"></span></label>
         </div>
         <div class="sp-row">
           <div class="sp-label">Tam Ekran Reklam<small>Slayt olarak ekrana vurur (her 2dk)</small></div><label
@@ -2212,7 +2303,74 @@
 
       // Eczaneler render edildikten sonra kampanya/reklamları araya yerleştirir
       if (typeof injectAds === 'function') injectAds();
+
+      drawLiveMap(data);
     }
+
+    let mapInstance = null;
+    function drawLiveMap(data) {
+      if (!mapInstance) {
+        mapInstance = L.map('liveMap');
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; OpenStreetMap',
+          subdomains: 'abcd',
+          maxZoom: 19
+        }).addTo(mapInstance);
+      }
+
+      // Harita Container'i tam otursun diye
+      setTimeout(() => mapInstance.invalidateSize(), 500);
+
+      // Mevcut marker'ları temizle
+      mapInstance.eachLayer((layer) => {
+        if (layer instanceof L.Marker) { mapInstance.removeLayer(layer); }
+      });
+
+      const bounds = [];
+      const POLEN_LAT = 39.767564;
+      const POLEN_LON = 30.505898;
+
+      // Polen Eczanesi (Siz Buradasınız) Pin'i
+      const ptIcon = L.divIcon({
+        className: 'custom-pin',
+        html: '<div style="background:#ef4444; border:3px solid #fff; border-radius:50%; width:20px; height:20px; box-shadow:0 0 10px rgba(239, 68, 68, 0.8);"></div><div style="text-align:center; font-weight:800; font-size:12px; margin-top:2px; color:#ef4444; text-shadow:0 0 3px #fff;">Siz Buradasınız</div>',
+        iconSize: [120, 60],
+        iconAnchor: [60, 10]
+      });
+      L.marker([POLEN_LAT, POLEN_LON], { icon: ptIcon }).addTo(mapInstance);
+      bounds.push([POLEN_LAT, POLEN_LON]);
+
+      // Diğer Nöbetçi Eczaneler Pin'i
+      data.forEach(e => {
+        if (e.lat && e.lon) {
+          const mIcon = L.divIcon({
+            className: 'pharm-pin',
+            html: '<div style="background:#3b82f6; border:2px solid #fff; border-radius:50%; width:14px; height:14px; box-shadow:0 0 8px rgba(0,0,0,0.5);"></div>',
+            iconSize: [14, 14],
+            iconAnchor: [7, 7]
+          });
+          L.marker([e.lat, e.lon], { icon: mIcon }).bindPopup(`<b>${e.ad}</b><br>${(e.uzaklik).toFixed(1)} km`).addTo(mapInstance);
+          bounds.push([e.lat, e.lon]);
+        }
+      });
+
+      if (bounds.length > 0) {
+        mapInstance.fitBounds(bounds, { padding: [30, 30] });
+      }
+    }
+
+    // Eczacılar Odası QR Code Initialize (Bir Kere Çalışır)
+    setTimeout(() => {
+      document.getElementById('takeawayQR').innerHTML = '';
+      new QRCode(document.getElementById('takeawayQR'), {
+        text: "https://www.eskisehireczaciodasi.org.tr/nobetci-eczaneler/",
+        width: 150,
+        height: 150,
+        colorDark: "#0f172a",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }, 1000);
 
     // ── BAŞLAT — Her 30 dakikada bir otomatik yenile ──────────────────
     veriGetir();
@@ -2252,7 +2410,7 @@
     // ══════════════════════════════════════════════════════════════════
 
     const DEFAULTS = {
-      theme: 'modern',
+      theme: 'modern', sidebarOn: true,
       fsAd: false, weatherOn: true, dutyAlert: true,
       autoScroll: false, scrollSpeed: 'medium'
     };
@@ -2274,6 +2432,7 @@
     // ── Ayarları UI'a yansıt ──
     function settingsToUI(s) {
       if (document.getElementById('sTheme')) document.getElementById('sTheme').value = s.theme || 'modern';
+      document.getElementById('sSidebar').checked = s.sidebarOn !== false;
       document.getElementById('sFsAd').checked = s.fsAd;
       document.getElementById('sWeather').checked = s.weatherOn;
       document.getElementById('sDutyAlert').checked = s.dutyAlert;
@@ -2285,6 +2444,7 @@
     function uiToSettings() {
       return {
         theme: document.getElementById('sTheme').value,
+        sidebarOn: document.getElementById('sSidebar').checked,
         fsAd: document.getElementById('sFsAd').checked,
         weatherOn: document.getElementById('sWeather').checked,
         dutyAlert: document.getElementById('sDutyAlert').checked,
@@ -2315,6 +2475,15 @@
       }
 
       if (!s.dutyAlert) document.body.classList.remove('we-are-onduty');
+
+      // Harita ve QR Panel Kontrolü
+      const sidebar = document.querySelector('.side-col');
+      if (sidebar) {
+        sidebar.style.display = (s.sidebarOn !== false) ? 'flex' : 'none';
+        if (s.sidebarOn !== false) {
+          setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 300);
+        }
+      }
     }
 
     // -- Tam Ekran Reklam Oynatici --
