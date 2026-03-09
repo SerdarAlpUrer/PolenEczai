@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nöbetçi Eczaneler — Eskişehir Merkez</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  <!-- QR Kod Kütüphanesi -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      /* Premium Dark & Glassmorphism Colors */
+      --bg: #0f111a;
+      --glass-bg: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-border-highlight: rgba(192, 57, 43, 0.4);
+      --text-main: #ffffff;
+      --text-muted: #959595;
+      --red: #c0392b;
+      --red-br: #ff4747;
+      --red-glow: rgba(255, 71, 71, 0.15);
+      --radius: clamp(14px, 1.5vw, 20px);
+
+      /* Fluid font scale */
+      --f-xs: clamp(9px, .8vw, 11px);
+      --f-sm: clamp(11px, 1vw, 13px);
+      --f-md: clamp(13px, 1.2vw, 15px);
+      --f-lg: clamp(15px, 1.4vw, 18px);
+      --f-xl: clamp(18px, 1.7vw, 24px);
+      --f-2xl: clamp(22px, 2.2vw, 28px);
+      --f-3xl: clamp(26px, 2.8vw, 36px);
+
+      /* Spacing */
+      --s-xs: clamp(4px, .4vw, 6px);
+      --s-sm: clamp(8px, .8vw, 12px);
+      --s-md: clamp(12px, 1.2vw, 18px);
+      --s-lg: clamp(16px, 1.6vw, 24px);
+      --s-xl: clamp(20px, 2vw, 32px);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      /* Subtle dark dot pattern */
+      background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+      color: var(--text-main);
+      overflow: hidden;
+      transition: background 1.5s ease;
+    }
+
+    /* ── DINAMIK ARKA PLAN ── */
+    body.weather-snow {
+      background-color: #0f1626;
+      background-image: radial-gradient(rgba(173, 216, 230, 0.1) 1px, transparent 1px), linear-gradient(180deg, rgba(20, 40, 70, 0.8) 0%, #0f111a 100%);
+    }
+
+    body.weather-rain {
+      background-color: #121417;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, #111b2b, #0f111a);
+    }
+
+    body.weather-clear {
+      background-color: #0d121c;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px), radial-gradient(circle at top right, rgba(255, 215, 0, 0.08), transparent 40%);
+    }
+
+    body.we-are-onduty {
+      background-color: #1a0808 !important;
+      background-image: radial-gradient(rgba(227, 6, 19, 0.15) 1px, transparent 1px), linear-gradient(to bottom, rgba(130, 0, 0, 0.2), #0f111a) !important;
+      box-shadow: inset 0 0 100px rgba(227, 6, 19, 0.15);
+      animation: alertPulse 3s infinite alternate;
+    }
+
+    @keyframes alertPulse {
+      0% {
+        box-shadow: inset 0 0 80px rgba(227, 6, 19, 0.1);
+      }
+
+      100% {
+        box-shadow: inset 0 0 180px rgba(227, 6, 19, 0.35);
+      }
+    }
+
+    /* Premium Glow Orbs */
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    body::before {
+      top: -10%;
+      left: -10%;
+      width: 50vw;
+      height: 50vw;
+      background: radial-gradient(circle, rgba(220, 40, 40, 0.18) 0%, transparent 70%);
+    }
+
+    body::after {
+      bottom: -20%;
+      right: -10%;
+      width: 60vw;
+      height: 60vw;
+      background: radial-gradient(circle, rgba(192, 57, 43, 0.15) 0%, transparent 70%);
+    }
+
+    .page-wrap {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HEADER (Glass) ── */
+    header {
+      flex-shrink: 0;
+      background: rgba(15, 17, 26, 0.65);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-bottom: 1px solid var(--glass-border);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+      padding: 0 var(--s-xl);
+      height: clamp(74px, 9vh, 96px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+    }
+
+    .hbrand {
+      display: flex;
+      align-items: center;
+      gap: var(--s-md)
+    }
+
+    .hicon {
+      width: clamp(40px, 4.5vw, 56px);
+      height: clamp(40px, 4.5vw, 56px);
+      background: linear-gradient(135deg, #e74c3c 0%, #900000 100%);
+      border-radius: clamp(10px, 1vw, 14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(20px, 2vw, 28px);
+      box-shadow: 0 0 20px rgba(192, 57, 43, .4), inset 0 0 0 1px rgba(255, 255, 255, .2);
+      flex-shrink: 0;
+    }
+
+    .hpolen {
+      font-size: clamp(18px, 1.9vw, 26px);
+      font-weight: 900;
+      letter-spacing: -.5px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: var(--s-xs);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .hpolen em {
+      color: var(--red-br);
+      font-style: normal;
+      text-shadow: 0 2px 12px rgba(231, 76, 60, 0.4);
+    }
+
+    .hpolen-addr {
+      font-size: var(--f-xs);
+      color: var(--text-muted);
+      margin-top: 2px;
+      letter-spacing: .3px
+    }
+
+    .htitle {
+      font-size: var(--f-xs);
+      font-weight: 700;
+      color: #888;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: clamp(4px, .4vh, 6px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .htitle-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--red-br);
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 8px var(--red-br)
+    }
+
+    .hright {
+      display: flex;
+      align-items: center;
+      gap: var(--s-md)
+    }
+
+    .live {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red-glow);
+      border: 1px solid rgba(255, 71, 71, .2);
+      border-radius: 99px;
+      padding: clamp(6px, .6vh, 8px) clamp(16px, 1.6vw, 20px);
+      font-size: clamp(14px, 1.4vw, 18px);
+      font-weight: 800;
+      color: var(--red-br);
+      box-shadow: 0 0 15px rgba(192, 57, 43, .15);
+      letter-spacing: 0.5px;
+    }
+
+    .ldot {
+      width: 8px;
+      height: 8px;
+      background: var(--red-br);
+      border-radius: 50%;
+      animation: pulse 1.8s ease-in-out infinite;
+      box-shadow: 0 0 10px var(--red-br)
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: .4;
+        transform: scale(.65)
+      }
+    }
+
+    #clock,
+    #weather {
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
+      display: flex;
+    }
+
+    #clock {
+      flex-direction: column;
+      align-items: flex-end;
+      padding: clamp(6px, 1vh, 8px) clamp(12px, 1.5vw, 18px);
+      line-height: 1.15;
+      text-align: right;
+    }
+
+    #weather {
+      align-items: center;
+      gap: 8px;
+      padding: 0 clamp(12px, 1.5vw, 18px);
+    }
+
+    #clock .c-date {
+      font-size: clamp(10px, 1.1vw, 13px);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #bbb;
+      margin-bottom: 2px;
+    }
+
+    #clock .c-time {
+      font-size: clamp(18px, 1.9vw, 24px);
+      color: #f1c40f;
+      font-weight: 900;
+      text-shadow: 0 0 12px rgba(241, 196, 15, 0.3);
+      letter-spacing: 1px;
+    }
+
+    #weather span {
+      color: var(--text-main);
+      font-size: clamp(16px, 1.8vw, 22px);
+      font-weight: 800;
+    }
+
+    .spill {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 99px;
+      padding: clamp(5px, .6vh, 8px) clamp(12px, 1.2vw, 20px);
+      font-size: var(--f-sm);
+      font-weight: 600;
+    }
+
+    .spill em {
+      color: var(--text-main);
+      font-style: normal;
+      font-weight: 800
+    }
+
+    #ybtn {
+      background: linear-gradient(to bottom, #d32f2f, #a00000);
+      color: #fff;
+      border: none;
+      border-radius: clamp(8px, .8vw, 12px);
+      padding: clamp(8px, .9vh, 12px) clamp(16px, 1.6vw, 24px);
+      font-size: var(--f-sm);
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .3s ease;
+      box-shadow: 0 4px 15px rgba(192, 57, 43, .3), inset 0 1px 0 rgba(255, 255, 255, .2);
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+
+    #ybtn:hover {
+      filter: brightness(1.2);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(192, 57, 43, .4), inset 0 1px 0 rgba(255, 255, 255, .3);
+    }
+
+    #ybtn:active {
+      transform: translateY(1px)
+    }
+
+    #ybtn.loading {
+      opacity: .6;
+      pointer-events: none
+    }
+
+    #pbtn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: clamp(8px, .8vw, 12px);
+      padding: clamp(8px, .9vh, 12px) clamp(16px, 1.6vw, 24px);
+      font-size: var(--f-sm);
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .3s ease;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin-right: clamp(4px, .5vw, 8px);
+    }
+
+    #pbtn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    #settingsBtn {
+      background: linear-gradient(135deg, #1f2533, #0f121a);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: clamp(8px, .8vw, 12px);
+      padding: clamp(8px, .9vh, 12px) clamp(16px, 1.6vw, 24px);
+      font-size: var(--f-sm);
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .3s ease;
+      letter-spacing: .5px;
+      margin-right: clamp(4px, .5vw, 8px);
+    }
+
+    #settingsBtn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ── SCROLL ALANI ── */
+    .scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      z-index: 1;
+      padding: var(--s-lg) var(--s-lg) var(--s-xl);
+    }
+
+    .scroll-area::-webkit-scrollbar {
+      width: 6px
+    }
+
+    .scroll-area::-webkit-scrollbar-track {
+      background: transparent
+    }
+
+    .scroll-area::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 580px), 1fr));
+      gap: clamp(14px, 1.6vh, 24px);
+    }
+
+    /* ── GLASS KART ── */
+    .card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: clamp(12px, 1.5vh, 18px) clamp(14px, 1.5vw, 20px);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0 clamp(10px, 1vw, 16px);
+      position: relative;
+      overflow: hidden;
+      transition: all .3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.15) 0%, transparent 100%);
+    }
+
+    /* İnce kırmızı sol kenar vurgusu */
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--red-br), transparent);
+      opacity: 0.7;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.09);
+      border-color: var(--glass-border-highlight);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(192, 57, 43, .15);
+    }
+
+    .ci {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, .8vh, 10px);
+      min-width: 0;
+      justify-content: center;
+    }
+
+    .cname {
+      font-size: clamp(16px, 1.7vw, 22px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -.5px;
+      color: var(--text-main);
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+    }
+
+    .caddr {
+      font-size: clamp(11px, 1.1vw, 14px);
+      color: var(--text-muted);
+      line-height: 1.4;
+      display: flex;
+      gap: 6px;
+      font-weight: 300;
+    }
+
+    .caddr-ic {
+      color: var(--red-br);
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-size: .9em;
+      filter: drop-shadow(0 0 4px rgba(192, 57, 43, 0.5));
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(5px, .5vw, 8px);
+      margin-top: 4px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: clamp(10.5px, 1.05vw, 14px);
+      font-weight: 600;
+      padding: clamp(4px, .5vh, 7px) clamp(10px, .9vw, 14px);
+      border-radius: 6px;
+    }
+
+    .chip-t {
+      background: rgba(255, 255, 255, .03);
+      border: 1px solid rgba(255, 255, 255, .1);
+      color: #ddd
+    }
+
+    .chip-s {
+      background: linear-gradient(135deg, rgba(192, 57, 43, 0.15), rgba(192, 57, 43, 0.05));
+      border: 1px solid rgba(231, 76, 60, .3);
+      color: var(--red-br);
+      box-shadow: inset 0 0 10px rgba(255, 71, 71, 0.05);
+    }
+
+    .cqr {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      flex-shrink: 0
+    }
+
+    .qrbox {
+      background: #fff;
+      border-radius: clamp(8px, .8vw, 12px);
+      padding: clamp(4px, .4vw, 8px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .4);
+      width: clamp(75px, 8vw, 105px);
+      height: clamp(75px, 8vw, 105px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qrbox canvas,
+    .qrbox img {
+      display: block;
+      max-width: 100%;
+      max-height: 100%
+    }
+
+    .qrlbl {
+      font-size: var(--f-xs);
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.4;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .qrlbl strong {
+      color: var(--red-br)
+    }
+
+    /* ── ANIMATED ICONS ── */
+    @keyframes floatCross {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-4px);
+      }
+    }
+
+    @keyframes pulseGlow {
+
+      0%,
+      100% {
+        filter: drop-shadow(0 0 5px rgba(227, 6, 19, 0.4));
+      }
+
+      50% {
+        filter: drop-shadow(0 0 14px rgba(227, 6, 19, 0.8));
+      }
+    }
+
+    @keyframes ringShake {
+
+      0%,
+      100% {
+        transform: rotate(0);
+      }
+
+      15% {
+        transform: rotate(-15deg);
+      }
+
+      30% {
+        transform: rotate(15deg);
+      }
+
+      45% {
+        transform: rotate(-10deg);
+      }
+
+      60% {
+        transform: rotate(10deg);
+      }
+
+      75% {
+        transform: rotate(-5deg);
+      }
+
+      90% {
+        transform: rotate(5deg);
+      }
+    }
+
+    @keyframes mapBounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-3px);
+      }
+    }
+
+    .anim-logo {
+      animation: floatCross 4s ease-in-out infinite, pulseGlow 3s ease-in-out infinite;
+    }
+
+    .anim-ring {
+      animation: ringShake 3s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    .anim-bounce {
+      animation: mapBounce 2s ease-in-out infinite;
+    }
+
+    .anim-pulse {
+      animation: pulseGlow 2.5s ease-in-out infinite;
+    }
+
+    .icn-sm {
+      width: 1.15em;
+      height: 1.15em;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    /* ── DURUM ── */
+    #status {
+      display: none;
+      text-align: center;
+      padding: 15vh 20px;
+      position: relative;
+      z-index: 1
+    }
+
+    #status.show {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .si {
+      font-size: clamp(40px, 6vw, 64px);
+      margin-bottom: var(--s-md);
+      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2))
+    }
+
+    .st {
+      font-size: var(--f-lg);
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    /* ── FOOTER (Glass) ── */
+    footer {
+      flex-shrink: 0;
+      background: rgba(15, 17, 26, 0.7);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-top: 1px solid var(--glass-border);
+      padding: clamp(8px, 1vh, 14px) var(--s-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--s-md);
+      flex-wrap: wrap;
+      z-index: 50;
+      box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .footer-text {
+      font-size: var(--f-xs);
+      color: #777;
+      letter-spacing: .8px;
+      font-weight: 400;
+    }
+
+    .footer-text em {
+      color: var(--red-br);
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .footer-sep {
+      color: #444;
+      font-size: var(--f-xs)
+    }
+
+    .footer-disc {
+      font-size: var(--f-xs);
+      color: #555;
+      letter-spacing: .3px;
+      font-style: italic;
+    }
+
+    /* ── MOBİL UYUM (Responsive) ── */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        height: auto;
+        padding: 16px;
+        gap: 16px;
+      }
+
+      .hbrand {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hright {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      .live {
+        order: 1;
+      }
+
+      #ybtn {
+        order: 2;
+      }
+
+      #clock {
+        order: 3;
+        width: 100%;
+        text-align: center;
+        margin-top: 8px;
+        font-size: 15px;
+      }
+
+      .spill {
+        display: none;
+      }
+
+      .scroll-area {
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 12px;
+      }
+
+      .grid {
+        /* Mobil ekranda en az 2 kart yan yana duracak (minimum genislik kucultuldu) */
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        padding: 14px 12px;
+        gap: 12px;
+      }
+
+      .cname {
+        font-size: 17px;
+      }
+
+      .caddr {
+        font-size: 12px;
+      }
+
+      .qrbox {
+        width: 70px;
+        height: 70px;
+        padding: 4px;
+      }
+
+      .qrlbl {
+        font-size: 10px;
+      }
+    }
+
+    /* ── YAZDIRMA UYUMU (Print) ── */
+    @media print {
+      @page {
+        size: A4 landscape;
+        margin: 5mm;
+      }
+
+      html {
+        overflow: visible !important;
+        height: auto !important;
+      }
+
+      body {
+        background: #fff !important;
+        color: #000 !important;
+        overflow: visible !important;
+        height: auto !important;
+        margin: 0;
+        padding: 0;
+        font-size: 10px !important;
+        background-image: none !important;
+      }
+
+      body::before,
+      body::after {
+        display: none !important;
+      }
+
+      .page-wrap {
+        height: auto !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        display: block !important;
+      }
+
+      header {
+        background: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 0 10px 0 !important;
+        height: auto !important;
+        justify-content: center;
+        position: relative !important;
+      }
+
+      .hbrand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        gap: 10px;
+      }
+
+      .hright {
+        display: none !important;
+      }
+
+      .hicon {
+        width: 30px !important;
+        height: 30px !important;
+      }
+
+      .hicon svg {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .hpolen {
+        color: #000 !important;
+        text-shadow: none !important;
+        font-size: 16px !important;
+      }
+
+      .hpolen em {
+        color: #c0392b !important;
+      }
+
+      .hpolen-addr {
+        font-size: 10px !important;
+        color: #555 !important;
+      }
+
+      .htitle {
+        font-size: 11px !important;
+        margin-top: 2px !important;
+        color: #555 !important;
+      }
+
+      .htitle-dot {
+        background: #c0392b !important;
+        box-shadow: none !important;
+      }
+
+      .scroll-area {
+        overflow: visible !important;
+        height: auto !important;
+        padding: 5px !important;
+        flex: none !important;
+      }
+
+      #status {
+        display: none !important;
+      }
+
+      .grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 6px !important;
+        overflow: visible !important;
+      }
+
+      .card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        -webkit-column-break-inside: avoid !important;
+        border: 1px solid #ccc !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        margin-bottom: 0 !important;
+        padding: 6px 8px !important;
+        gap: 6px !important;
+        font-size: 90% !important;
+        overflow: visible !important;
+        transform: none !important;
+      }
+
+      .card::before,
+      .card::after {
+        display: none !important;
+      }
+
+      .ci {
+        gap: 4px !important;
+      }
+
+      .cname {
+        color: #000 !important;
+        text-shadow: none !important;
+        font-size: 14px !important;
+        line-height: 1 !important;
+        margin: 0;
+      }
+
+      .caddr {
+        color: #333 !important;
+        font-size: 10px !important;
+        line-height: 1.2 !important;
+        gap: 4px !important;
+      }
+
+      .caddr-ic {
+        font-size: 10px !important;
+        margin-top: 0 !important;
+        filter: none !important;
+        color: #c0392b !important;
+      }
+
+      .chips {
+        gap: 4px !important;
+        margin-top: 2px !important;
+      }
+
+      .chip {
+        padding: 2px 6px !important;
+        font-size: 9px !important;
+        border-radius: 4px !important;
+      }
+
+      .chip-t {
+        background: #eee !important;
+        color: #000 !important;
+        border: 1px solid #ccc !important;
+      }
+
+      .chip-s {
+        background: #fff0f0 !important;
+        color: #c00 !important;
+        border: 1px solid #c00 !important;
+        box-shadow: none !important;
+      }
+
+      .cqr {
+        display: flex !important;
+        gap: 2px !important;
+        margin-left: auto;
+      }
+
+      .qrbox {
+        width: 45px !important;
+        height: 45px !important;
+        padding: 2px !important;
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+      }
+
+      .qrlbl {
+        font-size: 8px !important;
+        margin-bottom: 0 !important;
+        color: #333 !important;
+      }
+
+      .qrlbl strong {
+        color: #c0392b !important;
+      }
+
+      footer {
+        display: none !important;
+      }
+
+      svg path {
+        fill: #c0392b !important;
+      }
+    }
+
+    /* ── AYARLAR PANELİ ── */
+    .settings-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .15);
+      color: #888;
+      font-size: 22px;
+      cursor: pointer;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .3s;
+      backdrop-filter: blur(10px)
+    }
+
+    .settings-btn:hover {
+      background: rgba(255, 255, 255, .15);
+      color: #fff;
+      transform: rotate(90deg)
+    }
+
+    .settings-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .7);
+      z-index: 300;
+      backdrop-filter: blur(5px)
+    }
+
+    .settings-overlay.open {
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .settings-panel {
+      background: #1a1d2e;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 16px;
+      padding: 28px 32px;
+      width: min(520px, 90vw);
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .6)
+    }
+
+    .settings-panel::-webkit-scrollbar {
+      width: 4px
+    }
+
+    .settings-panel::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, .15);
+      border-radius: 4px
+    }
+
+    .sp-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff
+    }
+
+    .sp-title span {
+      color: var(--red-br)
+    }
+
+    .sp-group {
+      margin-bottom: 18px;
+      padding: 14px;
+      background: rgba(255, 255, 255, .03);
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 10px
+    }
+
+    .sp-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px
+    }
+
+    .sp-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .05)
+    }
+
+    .sp-row:last-child {
+      border: none
+    }
+
+    .sp-label {
+      font-size: 14px;
+      color: #ccc;
+      font-weight: 500
+    }
+
+    .sp-label small {
+      display: block;
+      font-size: 11px;
+      color: #666;
+      margin-top: 2px;
+      font-weight: 400
+    }
+
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0
+    }
+
+    .toggle .slider {
+      position: absolute;
+      inset: 0;
+      background: #333;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: .3s
+    }
+
+    .toggle .slider::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: #888;
+      border-radius: 50%;
+      transition: .3s
+    }
+
+    .toggle input:checked+.slider {
+      background: var(--red)
+    }
+
+    .toggle input:checked+.slider::before {
+      transform: translateX(20px);
+      background: #fff
+    }
+
+    .sp-input {
+      background: #0f111a;
+      border: 1px solid rgba(255, 255, 255, .1);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      width: 180px
+    }
+
+    .sp-select {
+      background: #0f111a;
+      border: 1px solid rgba(255, 255, 255, .1);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      width: 180px;
+      cursor: pointer
+    }
+
+    .sp-close {
+      background: linear-gradient(135deg, #c0392b, #900);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+      font-family: inherit;
+      transition: all .3s
+    }
+
+    .sp-close:hover {
+      filter: brightness(1.2)
+    }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      flex-shrink: 0;
+      background: rgba(192, 57, 43, .08);
+      border-top: 1px solid rgba(192, 57, 43, .2);
+      overflow: hidden;
+      height: 0;
+      transition: height .3s
+    }
+
+    .ticker-wrap.on {
+      height: 28px
+    }
+
+    .ticker-inner {
+      display: flex;
+      align-items: center;
+      height: 28px;
+      white-space: nowrap;
+      animation: tickerScroll 30s linear infinite
+    }
+
+    .ticker-inner span {
+      font-size: 12px;
+      color: #ff6b6b;
+      font-weight: 600;
+      padding-right: 80px;
+      letter-spacing: .5px
+    }
+
+    @keyframes tickerScroll {
+      0% {
+        transform: translateX(100%)
+      }
+
+      100% {
+        transform: translateX(-100%)
+      }
+    }
+
+    /* ── GERİ SAYIM ── */
+    .countdown-bar {
+      flex-shrink: 0;
+      background: rgba(10, 12, 20, .9);
+      border-top: 1px solid rgba(255, 255, 255, .06);
+      padding: 2px 16px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      height: 28px;
+      font-size: 12px;
+      color: #888
+    }
+
+    .countdown-bar.on {
+      display: flex
+    }
+
+    .countdown-bar .cd-label {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: #666
+    }
+
+    .countdown-bar .cd-time {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--red-br);
+      font-variant-numeric: tabular-nums
+    }
+
+    /* ── ECZANE BİLGİ ── */
+    .pharma-info {
+      flex-shrink: 0;
+      background: rgba(192, 57, 43, .06);
+      border-top: 1px solid rgba(192, 57, 43, .15);
+      padding: 2px 16px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      height: 28px;
+      font-size: 11px;
+      color: #999;
+      flex-wrap: nowrap;
+      overflow: hidden
+    }
+
+    .pharma-info.on {
+      display: flex
+    }
+
+    .pharma-info .pi-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap
+    }
+
+    .pharma-info .pi-icon {
+      color: var(--red-br);
+      font-size: 11px
+    }
+
+    .pharma-info .pi-name {
+      font-weight: 700;
+      color: #ddd;
+      font-size: 12px
+    }
+
+    /* ── KIOSK MODE ── */
+    body.kiosk {
+      cursor: none
+    }
+
+    body.kiosk .settings-btn {
+      opacity: 0;
+      transition: opacity .3s
+    }
+
+    body.kiosk .settings-btn:hover {
+      opacity: 1
+    }
+
+    body.kiosk #ybtn,
+    body.kiosk #pbtn {
+      display: none
+    }
+
+    /* ── FONT SIZE ── */
+    body.font-large .cname {
+      font-size: clamp(22px, 2.4vw, 32px) !important
+    }
+
+    body.font-large .caddr {
+      font-size: clamp(14px, 1.5vw, 18px) !important
+    }
+
+    body.font-large .chip {
+      font-size: clamp(13px, 1.3vw, 16px) !important
+    }
+
+    body.font-xlarge .cname {
+      font-size: clamp(26px, 3vw, 38px) !important
+    }
+
+    body.font-xlarge .caddr {
+      font-size: clamp(16px, 1.8vw, 22px) !important
+    }
+
+    body.font-xlarge .chip {
+      font-size: clamp(15px, 1.5vw, 18px) !important
+    }
+
+    /* ── KAMPANYA/REKLAM KARTLARI ── */
+    .card-ad {
+      position: relative;
+      border: 1px solid rgba(255, 180, 50, .3) !important;
+      background: linear-gradient(135deg, rgba(40, 30, 10, .9), rgba(30, 20, 5, .95)) !important
+    }
+
+    .card-ad::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255, 180, 50, .08), transparent);
+      pointer-events: none
+    }
+
+    .card-ad .ad-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: linear-gradient(135deg, #f39c12, #e67e22);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 1px;
+      text-transform: uppercase
+    }
+
+    .card-ad .ad-title {
+      font-size: clamp(16px, 1.8vw, 24px);
+      font-weight: 800;
+      color: #f1c40f;
+      margin-bottom: 6px;
+      text-shadow: 0 0 20px rgba(241, 196, 15, .3)
+    }
+
+    .card-ad .ad-desc {
+      font-size: clamp(12px, 1.2vw, 16px);
+      color: #ddd;
+      line-height: 1.4
+    }
+
+    .card-ad .ad-img {
+      width: 100%;
+      max-height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 8px
+    }
+
+    .card-ad .ad-content {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 4px;
+      padding: 4px
+    }
+
+    /* Kampanya ayarlari */
+    .camp-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 8px
+    }
+
+    .camp-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, .03);
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 8px;
+      margin-bottom: 6px
+    }
+
+    .camp-item .camp-name {
+      font-size: 13px;
+      color: #ccc;
+      font-weight: 600
+    }
+
+    .camp-del {
+      background: #c0392b;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: 700
+    }
+
+    .camp-del:hover {
+      filter: brightness(1.3)
+    }
+
+    .sp-btn-add {
+      background: linear-gradient(135deg, #f39c12, #e67e22);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      font-family: inherit;
+      margin-top: 4px
+    }
+
+    .sp-btn-add:hover {
+      filter: brightness(1.15)
+    }
+
+    /* ── TAM EKRAN REKLAM / SLAYT MODU ── */
+    .fs-layer {
+      position: fixed;
+      inset: 0;
+      background: #0f111a;
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.5s ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .fs-layer.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .fs-img {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.3;
+      filter: blur(10px) brightness(0.6);
+      transform: scale(1.1);
+      transition: all 4s ease;
+    }
+
+    .fs-layer.active .fs-img {
+      transform: scale(1);
+    }
+
+    .fs-content {
+      position: relative;
+      z-index: 51;
+      padding: 40px;
+      max-width: 80%;
+    }
+
+    .fs-content h1 {
+      font-size: clamp(60px, 8vw, 120px);
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      margin-bottom: 20px;
+      line-height: 1.1;
+      letter-spacing: -2px;
+    }
+
+    .fs-content p {
+      font-size: clamp(24px, 3vw, 40px);
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 300;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="fsAdOverlay" class="fs-layer">
+    <div class="fs-img" id="fsAdImg"></div>
+    <div class="fs-content">
+      <h1 id="fsAdTitle"></h1>
+      <p id="fsAdDesc"></p>
+    </div>
+  </div>
+
+  <div class="page-wrap">
+
+    <header>
+      <div class="hbrand">
+        <div class="hicon">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 60%; height: 60%;">
+            <path d="M25 15h50v15H45v13h25v14H45v13h30v15H25V15z" fill="white" />
+          </svg>
+        </div>
+        <div>
+          <div class="hpolen"><em>Polen</em>&nbsp;Eczanesi</div>
+          <div class="hpolen-addr">Eskişehir Merkez</div>
+          <div class="htitle"><span class="htitle-dot"></span>Nöbetçi Eczaneler</div>
+        </div>
+      </div>
+      <div class="hright">
+        <div class="live"><span class="ldot"></span>CANLI</div>
+        <div class="spill" id="spill"><em>—</em> eczane</div>
+
+        <button id="ybtn" onclick="veriGetir(true)" title="Yenile">⟳</button>
+        <button id="pbtn" onclick="window.print()" title="Yazdır">🖨️</button>
+        <button id="settingsBtn" onclick="openSettings()" title="Ayarlar">⚙️</button>
+        <div id="weather" title="Eskişehir Odunpazarı Hava Durumu">
+          <span id="w_icon">🌤️</span> <span id="w_temp">--°C</span>
+        </div>
+        <div id="clock"></div>
+      </div>
+    </header>
+
+    <div class="scroll-area">
+      <div id="status">
+        <div class="si" id="si">⏳</div>
+        <div class="st" id="st">Verilen yükleniyor… (Yaklaşık 3-5 saniye sürebilir)</div>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <footer>
+      <span class="footer-text">Bu yazılım <em>Polen Eczanesi</em> için Özel Olarak Yapılmıştır &nbsp;·&nbsp; Eskişehir
+        Merkez Nöbetçi Eczane Listesi</span>
+      <span class="footer-sep">|</span>
+      <span class="footer-disc">⚠ Verilerin doğruluğundan eczanemiz sorumlu değildir. Veriler Eskişehir Eczacı Odası'nın
+        yayınladığı listeden alınmaktadır.</span>
+      <span class="footer-sep">|</span>
+      <span id="last-updated" class="footer-disc" style="display: none; opacity: 0.6;">Son Güncelleme:
+        <em>--:--</em></span>
+    </footer>
+
+  </div><!-- /page-wrap -->
+
+
+
+  <!-- Ayarlar Paneli -->
+  <div class="settings-overlay" id="settingsOverlay" onclick="overlayClick(event)">
+    <div class="settings-panel">
+      <div class="sp-title">⚙️ <span>Kiosk</span> Ayarları</div>
+
+      <div class="sp-group">
+        <div class="sp-group-title">🖥️ Ekran & Özellikler</div>
+        <div class="sp-row">
+          <div class="sp-label">Tam Ekran Reklam<small>Slayt olarak ekrana vurur (her 2dk)</small></div><label
+            class="toggle"><input type="checkbox" id="sFsAd"><span class="slider"></span></label>
+        </div>
+        <div class="sp-row">
+          <div class="sp-label">Hava Durumu Göstergesi<small>Canlı sıcaklık ve arkaplan efekti</small></div><label
+            class="toggle"><input type="checkbox" id="sWeather"><span class="slider"></span></label>
+        </div>
+        <div class="sp-row">
+          <div class="sp-label">Nöbetçi Uyarı Efekti<small>Biz nöbetçiysek ekran kırmızı yanıp söner</small></div><label
+            class="toggle"><input type="checkbox" id="sDutyAlert"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="sp-group">
+        <div class="sp-group-title">🔄 Otomatik Kaydırma</div>
+        <div class="sp-row">
+          <div class="sp-label">Otomatik Kaydırma<small>Kartları otomatik kaydırır</small></div><label
+            class="toggle"><input type="checkbox" id="sScroll"><span class="slider"></span></label>
+        </div>
+        <div class="sp-row">
+          <div class="sp-label">Kaydırma Hızı</div><select class="sp-select" id="sScrollSpeed">
+            <option value="slow">Yavaş</option>
+            <option value="medium" selected>Orta</option>
+            <option value="fast">Hızlı</option>
+          </select>
+        </div>
+      </div>
+
+
+      <div class="sp-group">
+        <div class="sp-group-title">📣 Kampanya / Reklam</div>
+        <div class="camp-list" id="campList"></div>
+        <div class="sp-row">
+          <div class="sp-label">Başlık</div><input class="sp-input" id="campTitle" placeholder="Kampanya başlığı">
+        </div>
+        <div class="sp-row">
+          <div class="sp-label">Açıklama</div><input class="sp-input" id="campDesc" placeholder="Kısa açıklama">
+        </div>
+        <div class="sp-row">
+          <div class="sp-label">Görsel URL</div><input class="sp-input" id="campImg"
+            placeholder="https://... (opsiyonel)">
+        </div>
+        <div class="sp-row">
+          <div class="sp-label">Renk</div><select class="sp-select" id="campColor">
+            <option value="gold">Altın</option>
+            <option value="red">Kırmızı</option>
+            <option value="green">Yeşil</option>
+            <option value="blue">Mavi</option>
+            <option value="purple">Mor</option>
+          </select>
+        </div>
+        <button class="sp-btn-add" id="campAdd">+ Kampanya Ekle</button>
+      </div>
+
+      <button class="sp-close" onclick="closeSettings()">Kaydet ve Kapat</button>
+    </div>
+  </div>
+
+  <script>
+    // ── SAAT ────────────────────────────────────────────────────────────────────
+    function tick() {
+      const d = new Date();
+      const t = d.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' });
+      const s = d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('clock').innerHTML = '<div class="c-date">' + t + '</div><div class="c-time">' + s + '</div>';
+    }
+    tick(); setInterval(tick, 10000);
+
+    // ── HAVA DURUMU & DİNAMİK ARKA PLAN ──────────────────────────────────────
+    function getWeatherIconAndClass(code) {
+      if (code === 0) return ['☀️', 'weather-clear'];
+      if (code === 1 || code === 2 || code === 3) return ['⛅', ''];
+      if (code >= 40 && code <= 49) return ['🌫️', ''];
+      if ((code >= 50 && code <= 69) || (code >= 80 && code <= 82)) return ['🌧️', 'weather-rain'];
+      if ((code >= 70 && code <= 79) || (code >= 85 && code <= 86)) return ['🌨️', 'weather-snow'];
+      if (code >= 90 && code <= 99) return ['⛈️', 'weather-rain'];
+      return ['🌤️', ''];
+    }
+
+    async function fetchWeather() {
+      if (!settings.weatherOn) return;
+      try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=39.7582&longitude=30.5144&current_weather=true&timezone=auto');
+        const data = await res.json();
+        if (data.current_weather) {
+          const temp = Math.round(data.current_weather.temperature);
+          const [icon, bgClass] = getWeatherIconAndClass(data.current_weather.weathercode);
+
+          document.getElementById('w_icon').textContent = icon;
+          document.getElementById('w_temp').textContent = temp + '°C';
+
+          document.body.classList.remove('weather-snow', 'weather-rain', 'weather-clear');
+          if (bgClass) document.body.classList.add(bgClass);
+        }
+      } catch (err) {
+        console.error('Hava durumu alınamadı:', err);
+      }
+    }
+    fetchWeather();
+    setInterval(fetchWeather, 30 * 60 * 1000);
+
+
+    // ── QR ──────────────────────────────────────────────────────────────────────
+    function makeQR(el, url) {
+      try {
+        new QRCode(el, {
+          text: url, width: 120, height: 120,
+          colorDark: '#0a0a0a', colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch (e) {
+        el.innerHTML = '<div style="font-size:9px;color:#555;padding:6px;text-align:center">QR yok</div>';
+      }
+    }
+
+    // ── SCRAPING MANTIGI (Github Actions JSON) ──────────────────────────────
+    async function veriGetir(force = false) {
+      const btn = document.getElementById('ybtn');
+      const st = document.getElementById('status');
+      btn.textContent = '⏳'; btn.classList.add('loading');
+      st.className = 'show';
+      document.getElementById('si').textContent = '⏳';
+      document.getElementById('st').textContent = 'Nöbetçi eczaneler bulunuyor... Lütfen bekleyiniz.';
+      document.getElementById('grid').innerHTML = '';
+
+      try {
+        // Github Actions tarafindan olusturulan statik data.json dosyamızı çekiyoruz.
+        const ts = force ? `?_ts=${Date.now()}` : '';
+        const response = await fetch(`data.json${ts}`, { cache: "no-store" });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const htmlText = json.contents;
+
+        if (!htmlText || htmlText.length < 50) {
+          throw new Error('Eczacı Odası web sitesinden veri gelmedi.');
+        }
+
+        // Gelen metni sanal DOM'a çevir
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+
+        let data = [];
+
+        // Her eczane karti ".nobetci" sinifli bir div icinde
+        const kartlar = doc.querySelectorAll('.nobetci');
+
+        // Eger .nobetci bloklari bulunamazsa, h4 bazli fallback dene
+        if (kartlar.length === 0) {
+          console.log('nobetci sinifi bulunamadi, h4 bazli fallback deneniyor...');
+          // H4 bazli fallback: tum h4 elemanlarini bul
+          const h4Etiketleri = doc.querySelectorAll('h4.text-danger');
+          h4Etiketleri.forEach(h4 => {
+            const rawText = (h4.textContent || '').trim();
+            let ad = rawText;
+            let ilce = "Bilinmiyor";
+
+            if (rawText.includes(' - ')) {
+              const parts = rawText.split(' - ');
+              ad = parts[0].trim();
+              ilce = parts[1].trim();
+            }
+
+            if (!ad || ad.length < 3) return;
+
+            // Parent container icindeki tum metni al
+            const container = h4.closest('.nobetci, .nobetcig, .col-md-10, .col-md-12') || h4.parentElement;
+            const fullText = (container.textContent || '').replace(/\s+/g, ' ').trim();
+
+            // Harita linki bul
+            let haritaLink = "";
+            const mapLinks = container.querySelectorAll('a[href*="maps"], a[href*="google.com/maps"]');
+            if (mapLinks.length > 0) {
+              haritaLink = mapLinks[0].getAttribute('href') || '';
+            }
+
+            // Telefon bul
+            let telefon = "";
+            const telLinks = container.querySelectorAll('a[href^="tel:"]');
+            if (telLinks.length > 0) {
+              telefon = (telLinks[0].textContent || '').trim();
+            } else {
+              const tMatch = fullText.match(/0\d{10}|0\d{3}\s?\d{3}\s?\d{4}/);
+              if (tMatch) telefon = tMatch[0].trim();
+            }
+
+            // Koordinat bul
+            let lat = null, lon = null;
+            const latLonMatch = haritaLink.match(/q=([\d.]+),([\d.]+)/);
+            if (latLonMatch) { lat = latLonMatch[1]; lon = latLonMatch[2]; }
+
+            // Saat bul
+            let nobetBaslangic = "", nobetBitis = "";
+            const sMatch = fullText.match(/(\d{2}\.\d{2}\.\d{4}\s+\d{2}:\d{2})\s*\/\s*(\d{2}\.\d{2}\.\d{4}\s+\d{2}:\d{2})/);
+            if (sMatch) { nobetBaslangic = sMatch[1].trim(); nobetBitis = sMatch[2].trim(); }
+
+            // Adres: h4'ten sonraki p veya div icindeki ilk metin
+            let temizAdres = fullText.replace(ad, '').replace(ilce, '');
+            temizAdres = temizAdres.replace(/0\d{10}.*/, '').replace(/\d{2}\.\d{2}\.\d{4}.*/, '');
+            temizAdres = temizAdres.replace(/Eczaneyi haritada.*/, '').replace(/nöbetçidir\.?/gi, '');
+            temizAdres = temizAdres.replace(/\s+/g, ' ').trim().substring(0, 200);
+
+            data.push({ ad, ilce, adres: temizAdres, telefon, lat, lon, harita_link: haritaLink, nobet_baslangic: nobetBaslangic, nobet_bitis: nobetBitis });
+          });
+        } else {
+          // Ana yontem: .nobetci bloklari uzerinden calis
+          kartlar.forEach(kart => {
+            const h4 = kart.querySelector('h4');
+            if (!h4) return;
+
+            const rawText = (h4.textContent || '').trim();
+            let ad = rawText;
+            let ilce = "Bilinmiyor";
+
+            if (rawText.includes(' - ')) {
+              const parts = rawText.split(' - ');
+              ad = parts[0].trim();
+              ilce = parts[1].trim();
+            }
+
+            // Blacklist: cerez, gizlilik vs.
+            const blacklist = ["çerez ayarları", "gizlilik", "cerez", "oben"];
+            if (!ad || ad.length < 3 || blacklist.some(b => ad.toLowerCase().includes(b))) return;
+
+            // Kart icindeki tum metin
+            const fullText = (kart.textContent || '').replace(/\s+/g, ' ').trim();
+
+            // Harita linki bul (a[href*="maps"])
+            let haritaLink = "";
+            const mapLink = kart.querySelector('a[href*="maps"]');
+            if (mapLink) {
+              haritaLink = mapLink.getAttribute('href') || '';
+            }
+
+            // Telefon bul (a[href^="tel:"])
+            let telefon = "";
+            const telLink = kart.querySelector('a[href^="tel:"]');
+            if (telLink) {
+              telefon = (telLink.textContent || '').trim();
+            } else {
+              const tMatch = fullText.match(/0\d{10}|0\d{3}\s?\d{3}\s?\d{4}/);
+              if (tMatch) telefon = tMatch[0].trim();
+            }
+
+            // Koordinat bul
+            let lat = null, lon = null;
+            const latLonMatch = haritaLink.match(/q=([\d.]+),([\d.]+)/);
+            if (latLonMatch) { lat = latLonMatch[1]; lon = latLonMatch[2]; }
+
+            // Saat bul
+            let nobetBaslangic = "", nobetBitis = "";
+            const sMatch = fullText.match(/(\d{2}\.\d{2}\.\d{4}\s+\d{2}:\d{2})\s*\/\s*(\d{2}\.\d{2}\.\d{4}\s+\d{2}:\d{2})/);
+            if (sMatch) { nobetBaslangic = sMatch[1].trim(); nobetBitis = sMatch[2].trim(); }
+
+            // Adres: fa-home ikonundan sonraki metin (p icindeki ilk metin parcasi)
+            let temizAdres = "";
+            const pTag = kart.querySelector('p');
+            if (pTag) {
+              // p etiketinin tam metnini al, sonra telefondan itibaren kes
+              let adresRaw = (pTag.textContent || '').replace(/\s+/g, ' ').trim();
+              adresRaw = adresRaw.replace(/0\d{10}.*/, '');
+              adresRaw = adresRaw.replace(/\d{2}\.\d{2}\.\d{4}.*/, '');
+              adresRaw = adresRaw.replace(/Eczaneyi haritada.*/, '');
+              adresRaw = adresRaw.replace(/nöbetçidir\.?/gi, '');
+              temizAdres = adresRaw.trim().substring(0, 200);
+            }
+
+            data.push({ ad, ilce, adres: temizAdres, telefon, lat, lon, harita_link: haritaLink, nobet_baslangic: nobetBaslangic, nobet_bitis: nobetBitis });
+          });
+        }
+
+        console.log('Toplam parse edilen eczane:', data.length);
+
+        // Tarih cevirme yardimcisi: "DD.MM.YYYY HH:MM" -> Date objesi
+        function parseTarih(str) {
+          if (!str) return null;
+          const parts = str.split(' ');
+          if (parts.length !== 2) return null;
+          const d = parts[0].split('.');
+          const t = parts[1].split(':');
+          if (d.length !== 3 || t.length !== 2) return null;
+          return new Date(d[2], parseInt(d[1], 10) - 1, d[0], t[0], t[1]);
+        }
+
+        const nowMs = new Date().getTime();
+
+        // Sadece MERKEZ ilcelerini filtrele
+        const merkezData = data.filter(e => {
+          return (e.ilce || '').toUpperCase().includes('MERKEZ');
+        });
+
+        // Akilli zamanlamaya uyanlari filtrele (aktif veya yakin vardiyalar)
+        const aktifData = merkezData.filter(e => {
+          if (e.nobet_baslangic && e.nobet_bitis) {
+            const start = parseTarih(e.nobet_baslangic);
+            const end = parseTarih(e.nobet_bitis);
+
+            if (start && end) {
+              const startMs = start.getTime();
+              const endMs = end.getTime();
+
+              // Vardiyasi bitmisse gizle
+              if (nowMs > endMs) return false;
+
+              // Vardiyasinin baslamasina 8 saatten fazla varsa simdilik gizle
+              if (startMs - nowMs > (8 * 60 * 60 * 1000)) return false;
+            }
+          }
+          return true;
+        });
+
+        // Eger aktif filtreden eczane kalmadiysa, tum MERKEZ eczanelerini goster
+        // (Gunduz saatlerinde nobet bitmis olabilir, en azindan en son verileri gosterelim)
+        const filtrelenmisData = aktifData.length > 0 ? aktifData : merkezData;
+        // Polen Eczanesi Yaklasik Koordinati (Vişnelik, Atatürk Bulvarı)
+        const POLEN_LAT = 39.767564;
+        const POLEN_LON = 30.505898;
+
+        // Haversine formulü ile kus ucusu uzaklik (km)
+        function calcDistance(lat1, lon1, lat2, lon2) {
+          if (!lat1 || !lon1 || !lat2 || !lon2) return 999;
+          lat1 = parseFloat(lat1); lon1 = parseFloat(lon1);
+          lat2 = parseFloat(lat2); lon2 = parseFloat(lon2);
+          const R = 6371;
+          const dLat = (lat2 - lat1) * Math.PI / 180;
+          const dLon = (lon2 - lon1) * Math.PI / 180;
+          const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+          return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        }
+
+        // 1. Tum eczanelere gecici (kus ucusu * 1.35 yuruyus carpani) degerini ver
+        filtrelenmisData.forEach(e => {
+          e.uzaklik = calcDistance(POLEN_LAT, POLEN_LON, e.lat, e.lon) * 1.35;
+        });
+
+        // 2. OSRM API (Gercek Yurume Mesafesi) ile mesafeleri guncelleme deneyimi
+        const validCoords = filtrelenmisData.filter(e => e.lat && e.lon);
+        if (validCoords.length > 0) {
+          try {
+            // OSRM table servisine ilk sirada Polen Eczanesini koy, arkasina digerlerini ekle
+            const coordsStr = `${POLEN_LON},${POLEN_LAT};` + validCoords.map(e => `${e.lon},${e.lat}`).join(';');
+            const osrmUrl = `https://router.project-osrm.org/table/v1/foot/${coordsStr}?sources=0`;
+
+            // Timeout ile fetch
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 4000); // 4 saniye sinir
+            const res = await fetch(osrmUrl, { signal: controller.signal });
+            clearTimeout(timeoutId);
+
+            if (res.ok) {
+              const data = await res.json();
+              if (data.code === 'Ok' && data.distances && data.distances[0]) {
+                validCoords.forEach((e, i) => {
+                  const distMeters = data.distances[0][i + 1];
+                  if (distMeters && distMeters > 0) {
+                    e.uzaklik = distMeters / 1000; // Metreyi km'ye cevir
+                  }
+                });
+                console.log('OSRM: Gercek yurume rotalari alindi.');
+              }
+            }
+          } catch (err) {
+            console.warn('OSRM yurume rotasi alinamadi, tahmini mesafe kullaniliyor.', err);
+          }
+        }
+
+        // En yakindan en uzaga siralama
+        filtrelenmisData.sort((a, b) => a.uzaklik - b.uzaklik);
+
+        console.log('Merkez eczane:', merkezData.length, 'Aktif:', aktifData.length, 'Gosterilen:', filtrelenmisData.length);
+
+        // Verileri goster
+        goster(filtrelenmisData);
+
+        // "BUGUN BIZ NOBETCIYIZ" KONTROLU
+        const isPolenOnDuty = filtrelenmisData.some(e => (e.ad || '').toUpperCase().includes('POLEN'));
+        if (isPolenOnDuty) {
+          if (settings.dutyAlert) document.body.classList.add('we-are-onduty');
+          document.getElementById('spill').innerHTML = '🚨 BUGÜN NÖBETÇİYİZ 🚨';
+          document.getElementById('spill').style.background = 'rgba(227, 6, 19, 0.4)';
+          document.getElementById('spill').style.color = '#fff';
+        } else {
+          document.body.classList.remove('we-are-onduty');
+        }
+
+        const lu = new Date();
+        const luStr = lu.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+        const luEl = document.getElementById('last-updated');
+        luEl.innerHTML = 'Son Güncelleme: <em>' + luStr + '</em>';
+        luEl.style.display = 'flex';
+
+        st.className = '';
+      } catch (e) {
+        document.getElementById('si').textContent = '❌';
+        document.getElementById('st').textContent = 'Ağ Hatası: Oda sitesine bağlanılamadı. Lütfen internetinizi kontrol edin.';
+        console.error(e);
+      } finally {
+        btn.textContent = '⟳'; btn.classList.remove('loading');
+      }
+    }
+
+    // ── KARTLAR ─────────────────────────────────────────────────────────────────
+    function goster(data) {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+      document.getElementById('spill').innerHTML = '<em>' + data.length + '</em> nöbetçi eczane';
+
+      if (!data.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#555;font-size:16px">⚗️ Merkez bölgesinde nöbetçi eczane bulunamadı.</div>';
+        return;
+      }
+
+      data.forEach((e, i) => {
+        let murl = '';
+        if (e.harita_link && e.harita_link.includes('http')) {
+          murl = e.harita_link;
+        } else if (e.lat && e.lon) {
+          murl = `https://www.google.com/maps/search/?api=1&query=${e.lat},${e.lon}`;
+        } else if (e.adres) {
+          murl = `https://maps.google.com/?q=${encodeURIComponent(e.adres)}`;
+        }
+
+        let saat = '';
+        if (e.nobet_baslangic && e.nobet_bitis) {
+          try {
+            const b = e.nobet_baslangic.split(' ');
+            const bD = b[0].split('.').slice(0, 2).join('.');
+            const bT = b[1];
+
+            const e_ = e.nobet_bitis.split(' ');
+            const eD = e_[0].split('.').slice(0, 2).join('.');
+            const eT = e_[1];
+
+            saat = `<div style="display:flex; flex-direction:column; align-items:center; line-height:1.15; font-size:0.95em; opacity:0.9;"><span>${bD}</span><span style="font-weight:700; font-size:1.05em; margin-top:1px;">${bT}</span></div>
+                    <span style="opacity:0.6; margin:0 3px;">–</span>
+                    <div style="display:flex; flex-direction:column; align-items:center; line-height:1.15; font-size:0.95em; opacity:0.9;"><span>${eD}</span><span style="font-weight:700; font-size:1.05em; margin-top:1px;">${eT}</span></div>`;
+          } catch (err) {
+            saat = e.nobet_baslangic.split(' ')[1] + ' – ' + e.nobet_bitis.split(' ')[1];
+          }
+        }
+
+        const addr = (e.adres || '').substring(0, 130);
+
+        const c = document.createElement('div');
+        c.className = 'card';
+        c.innerHTML = `
+      <div class="ci">
+        <div class="cname">
+          <svg class="anim-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 1.4em; height: 1.4em; margin-right: 12px; flex-shrink: 0; border-radius: 20%;">
+            <rect width="100" height="100" rx="28" fill="url(#grad1)"/>
+            <path d="M65 25 L35 25 L35 75 L65 75 M35 50 L55 50" stroke="white" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="grad1" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#E30613"/>
+                <stop offset="1" stop-color="#8B0000"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>${e.ad || '—'}</span>
+        </div>
+        <div class="caddr"><span class="caddr-ic" style="margin-right:4px;">
+          <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em;"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+        </span><span>${addr || 'Adres bilgisi yok'}</span></div>
+        <div class="chips">
+          ${e.uzaklik && e.uzaklik < 999 ? `<span class="chip" style="background:rgba(52, 152, 219, 0.2);color:#5dade2;border:1px solid rgba(52, 152, 219, 0.4)"><svg class="icn-sm anim-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ${(e.uzaklik).toFixed(1)} km</span>` : ''}
+          ${e.telefon ? `<span class="chip chip-t"><svg class="icn-sm anim-ring" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> ${e.telefon}</span>` : ''}
+          ${saat ? `<span class="chip chip-s" style="align-items:center;"><svg class="icn-sm anim-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ${saat}</span>` : ''}
+        </div>
+      </div>
+      <div class="cqr">
+        <div class="qrbox" id="qr${i}"></div>
+        <div class="qrlbl"><strong>QR okut</strong><br>haritada aç</div>
+      </div>`;
+        grid.appendChild(c);
+        if (murl) setTimeout(() => makeQR(document.getElementById('qr' + i), murl), 0);
+        else document.getElementById('qr' + i).innerHTML = '<div style="font-size:9px;color:#555;text-align:center;padding:6px">Konum yok</div>';
+      });
+
+      // Eczaneler render edildikten sonra kampanya/reklamları araya yerleştirir
+      if (typeof injectAds === 'function') injectAds();
+    }
+
+    // ── BAŞLAT — Her 30 dakikada bir otomatik yenile ──────────────────
+    veriGetir();
+    setInterval(() => veriGetir(true), 30 * 60 * 1000);
+
+    // ── CANLI HAVA DURUMU ──────────────────────────────────────────────
+    async function fetchWeather() {
+      try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=39.767564&longitude=30.505898&current_weather=true&timezone=Europe/Istanbul');
+        const data = await res.json();
+        if (data && data.current_weather) {
+          const temp = Math.round(data.current_weather.temperature);
+          const code = data.current_weather.weathercode;
+
+          let icon = '☁️';
+          if (code === 0) icon = '☀️'; // Acik
+          else if (code === 1 || code === 2) icon = '🌤️'; // Parcali bulutlu
+          else if (code === 3) icon = '🌥️'; // Cok bulutlu
+          else if ([45, 48].includes(code)) icon = '🌫️'; // Sis
+          else if ([51, 53, 55, 56, 57].includes(code)) icon = '🌦️'; // Ciseleme
+          else if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) icon = '🌧️'; // Yagmur
+          else if ([71, 73, 75, 77, 85, 86].includes(code)) icon = '❄️'; // Kar
+          else if ([95, 96, 99].includes(code)) icon = '⛈️'; // Firtina
+
+          document.getElementById('w_temp').textContent = temp + '°C';
+          document.getElementById('w_icon').textContent = icon;
+        }
+      } catch (e) {
+        console.error('Hava durumu alinamadi:', e);
+      }
+    }
+    fetchWeather();
+    setInterval(fetchWeather, 30 * 60 * 1000);
+
+    // ══════════════════════════════════════════════════════════════════
+    // ── AYARLAR SİSTEMİ ──────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════════════════
+
+    const DEFAULTS = {
+      fsAd: false, weatherOn: true, dutyAlert: true,
+      autoScroll: false, scrollSpeed: 'medium'
+    };
+
+    function loadSettings() {
+      try { return Object.assign({}, DEFAULTS, JSON.parse(localStorage.getItem('polenSettings2') || '{}')); }
+      catch (e) { return { ...DEFAULTS }; }
+    }
+    function saveSettings(s) { localStorage.setItem('polenSettings2', JSON.stringify(s)); }
+
+    // Eski ayarlari temizle
+    localStorage.removeItem('polenSettings');
+
+    let settings = loadSettings();
+    let scrollInterval = null;
+    let fsAdInterval = null;
+    let currentAdIndex = 0;
+
+    // ── Ayarları UI'a yansıt ──
+    function settingsToUI(s) {
+      document.getElementById('sFsAd').checked = s.fsAd;
+      document.getElementById('sWeather').checked = s.weatherOn;
+      document.getElementById('sDutyAlert').checked = s.dutyAlert;
+      document.getElementById('sScroll').checked = s.autoScroll;
+      document.getElementById('sScrollSpeed').value = s.scrollSpeed;
+    }
+
+    // ── UI'dan ayarları oku ──
+    function uiToSettings() {
+      return {
+        fsAd: document.getElementById('sFsAd').checked,
+        weatherOn: document.getElementById('sWeather').checked,
+        dutyAlert: document.getElementById('sDutyAlert').checked,
+        autoScroll: document.getElementById('sScroll').checked,
+        scrollSpeed: document.getElementById('sScrollSpeed').value,
+      };
+    }
+
+    // ── Ayarları uygula ──
+    function applySettings(s) {
+      if (scrollInterval) { clearInterval(scrollInterval); scrollInterval = null; }
+      if (s.autoScroll) { startAutoScroll(s.scrollSpeed); }
+
+      // Tam Ekran Slayt Reklam Döngüsü
+      if (fsAdInterval) { clearInterval(fsAdInterval); fsAdInterval = null; }
+      document.getElementById('fsAdOverlay').classList.remove('active');
+      if (s.fsAd) { fsAdInterval = setInterval(playNextAd, 120000); } // Her 2 dakikada calisir
+
+      // Özellikler Toggle Kontrolleri
+      document.getElementById('weather').style.display = s.weatherOn ? 'flex' : 'none';
+      if (!s.weatherOn) {
+        document.body.classList.remove('weather-snow', 'weather-rain', 'weather-clear');
+      } else {
+        fetchWeather();
+      }
+
+      if (!s.dutyAlert) document.body.classList.remove('we-are-onduty');
+    }
+
+    // -- Tam Ekran Reklam Oynatici --
+    function playNextAd() {
+      const camps = loadCampaigns();
+      if (!camps || camps.length === 0) return;
+
+      const overlay = document.getElementById('fsAdOverlay');
+      const cur = camps[currentAdIndex % camps.length];
+
+      document.getElementById('fsAdTitle').textContent = cur.title || '';
+      document.getElementById('fsAdDesc').textContent = cur.desc || '';
+      document.getElementById('fsAdImg').style.backgroundImage = cur.img ? `url(${cur.img})` : 'none';
+
+      if (cur.color && cur.color === 'gold') overlay.style.background = 'linear-gradient(135deg, #443 0%, #111 100%)';
+      else if (cur.color && cur.color === 'red') overlay.style.background = 'linear-gradient(135deg, #500 0%, #111 100%)';
+      else if (cur.color && cur.color === 'blue') overlay.style.background = 'linear-gradient(135deg, #004 0%, #111 100%)';
+      else if (cur.color && cur.color === 'green') overlay.style.background = 'linear-gradient(135deg, #031 0%, #111 100%)';
+      else overlay.style.background = '#0f111a';
+
+      overlay.classList.add('active');
+      const timeToRead = 15000; // 15 saniye ekranda kalsin
+
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        currentAdIndex++;
+      }, timeToRead);
+    }
+
+    // ── Otomatik Kaydırma ──
+    function startAutoScroll(speed) {
+      const area = document.querySelector('.scroll-area');
+      if (!area) return;
+      const speeds = { slow: 1, medium: 2, fast: 4 };
+      const px = speeds[speed] || 2;
+      let dir = 1;
+      scrollInterval = setInterval(() => {
+        area.scrollTop += dir * px;
+        if (area.scrollTop + area.clientHeight >= area.scrollHeight - 5) {
+          dir = 0;
+          setTimeout(() => { area.scrollTop = 0; dir = 1; }, 3000);
+        }
+      }, 40);
+    }
+
+    // ── Ayarlar Panel Fonksiyonları ──
+    function openSettings() {
+      settingsToUI(settings);
+      document.getElementById('settingsOverlay').classList.add('open');
+    }
+    function closeSettings() {
+      settings = uiToSettings();
+      saveSettings(settings);
+      applySettings(settings);
+      document.getElementById('settingsOverlay').classList.remove('open');
+    }
+    function overlayClick(e) {
+      if (e.target === document.getElementById('settingsOverlay')) closeSettings();
+    }
+    // ══════════════════════════════════════════════════════════════════
+    // ── KAMPANYA / REKLAM SİSTEMİ ────────────────────────────────────
+    // ══════════════════════════════════════════════════════════════════
+
+    function loadCampaigns() {
+      try { return JSON.parse(localStorage.getItem('polenCampaigns') || '[]'); }
+      catch (e) { return []; }
+    }
+    function saveCampaigns(c) { localStorage.setItem('polenCampaigns', JSON.stringify(c)); }
+
+    const CAMP_COLORS = {
+      gold: { border: 'rgba(255,180,50,.4)', bg1: 'rgba(60,45,10,.9)', bg2: 'rgba(40,30,5,.95)', title: '#f1c40f', glow: 'rgba(241,196,15,.3)' },
+      red: { border: 'rgba(231,76,60,.4)', bg1: 'rgba(60,15,10,.9)', bg2: 'rgba(40,10,5,.95)', title: '#e74c3c', glow: 'rgba(231,76,60,.3)' },
+      green: { border: 'rgba(46,204,113,.4)', bg1: 'rgba(10,50,25,.9)', bg2: 'rgba(5,35,15,.95)', title: '#2ecc71', glow: 'rgba(46,204,113,.3)' },
+      blue: { border: 'rgba(52,152,219,.4)', bg1: 'rgba(10,25,55,.9)', bg2: 'rgba(5,15,40,.95)', title: '#3498db', glow: 'rgba(52,152,219,.3)' },
+      purple: { border: 'rgba(155,89,182,.4)', bg1: 'rgba(35,15,50,.9)', bg2: 'rgba(25,10,40,.95)', title: '#9b59b6', glow: 'rgba(155,89,182,.3)' }
+    };
+
+    function renderCampList() {
+      const list = document.getElementById('campList');
+      const camps = loadCampaigns();
+      list.innerHTML = camps.length === 0 ? '<div style="color:#555;font-size:12px;padding:8px;text-align:center">Henüz kampanya eklenmedi</div>' :
+        camps.map((c, i) => `<div class="camp-item"><span class="camp-name">${c.title}</span><button class="camp-del" onclick="deleteCamp(${i})">Sil</button></div>`).join('');
+    }
+
+    function deleteCamp(idx) {
+      const camps = loadCampaigns();
+      camps.splice(idx, 1);
+      saveCampaigns(camps);
+      renderCampList();
+      injectAds();
+    }
+    window.deleteCamp = deleteCamp;
+
+    function injectAds() {
+      const grid = document.getElementById('grid');
+      // Mevcut reklam kartlarini temizle
+      grid.querySelectorAll('.card-ad').forEach(el => el.remove());
+      const camps = loadCampaigns();
+      if (camps.length === 0) return;
+
+      camps.forEach(camp => {
+        const col = CAMP_COLORS[camp.color] || CAMP_COLORS.gold;
+        const card = document.createElement('div');
+        card.className = 'card card-ad';
+        card.style.border = `1px solid ${col.border}`;
+        card.style.background = `linear-gradient(135deg,${col.bg1},${col.bg2})`;
+        card.innerHTML = `
+          <div class="ad-badge">KAMPANYA</div>
+          <div class="ad-content">
+            ${camp.img ? `<img class="ad-img" src="${camp.img}" alt="${camp.title}" onerror="this.style.display='none'">` : ''}
+            <div class="ad-title" style="color:${col.title};text-shadow:0 0 20px ${col.glow}">${camp.title}</div>
+            ${camp.desc ? `<div class="ad-desc">${camp.desc}</div>` : ''}
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById('campAdd').addEventListener('click', () => {
+      const title = document.getElementById('campTitle').value.trim();
+      if (!title) return;
+      const camps = loadCampaigns();
+      camps.push({
+        title: title,
+        desc: document.getElementById('campDesc').value.trim(),
+        img: document.getElementById('campImg').value.trim(),
+        color: document.getElementById('campColor').value
+      });
+      saveCampaigns(camps);
+      renderCampList();
+      injectAds();
+      document.getElementById('campTitle').value = '';
+      document.getElementById('campDesc').value = '';
+      document.getElementById('campImg').value = '';
+    });
+
+    renderCampList();
+
+    // İlk yüklemede ayarları ve reklamları uygula
+    applySettings(settings);
+    setTimeout(injectAds, 2000); // Veriler yüklendikten sonra reklamları ekle
+  </script>
+</body>
+
+</html>
