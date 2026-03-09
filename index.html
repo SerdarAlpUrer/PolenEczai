@@ -2422,42 +2422,83 @@
           const temp = Math.round(data.current_weather.temperature);
           const code = data.current_weather.weathercode;
 
+          // Rastgele tavsiye secmek icin yardimci
+          const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
           let icon = '☁️';
           let adviceText = 'Sağlıklı günler dileriz!';
           let adviceIcon = '🌟';
 
+          // ── HAVA DURUMUNA GORE TAVSİYELER (Rastgele Seçim) ──
           if (code === 0) {
-            icon = '☀️'; adviceIcon = '🧴'; adviceText = 'Güneşli bir gün! Dışarı çıkarken güneş kreminizi sürmeyi unutmayın.';
+            icon = '☀️'; adviceIcon = '🧴';
+            adviceText = pickRandom([
+              'Güneşli bir gün! Dışarı çıkarken güneş kreminizi sürmeyi unutmayın.',
+              'Harika bir güneş var! Cildinizi UV ışınlarına karşı koruyun.',
+              'Güneşli ve güzel bir gün. Dışarı çıkmadan güneş gözlüğünüzü yanınıza alın.'
+            ]);
           }
           else if (code === 1 || code === 2) {
-            icon = '🌤️'; adviceIcon = '⛅'; adviceText = 'Hava parçalı bulutlu, keyifli bir gün dileriz. Temiz havanın tadını çıkarın.';
+            icon = '🌤️'; adviceIcon = '⛅';
+            adviceText = pickRandom([
+              'Hava parçalı bulutlu, keyifli bir gün dileriz. Temiz havanın tadını çıkarın.',
+              'Bulutlu ama güzel bir gün. Dışarıda hafif yürüyüşler için ideal.',
+              'Parçalı bulutlu gökyüzü... Derin bir nefes alın ve rahatlayın.'
+            ]);
           }
           else if (code === 3) {
-            icon = '🌥️'; adviceIcon = '☁️'; adviceText = 'Çok bulutlu bir gün. Kapalı hava modunuzu düşürmesin, güzel bir bitki çayı iyi gelebilir.';
+            icon = '🌥️'; adviceIcon = '☁️';
+            adviceText = pickRandom([
+              'Çok bulutlu bir gün. Kapalı hava modunuzu düşürmesin, güzel bir bitki çayı iyi gelebilir.',
+              'Gökyüzü kapalı dahi olsa, sağlıklı beslenerek enerjinizi yüksek tutun.',
+              'Tam kitap okuma veya evde dinlenme havası... C vitamininizi almayı ihmal etmeyin.'
+            ]);
           }
           else if ([45, 48].includes(code)) {
-            icon = '🌫️'; adviceIcon = '🌫️'; adviceText = 'Dışarıda sis var. Lütfen trafikte ve yolda dikkatli olunuz.';
+            icon = '🌫️'; adviceIcon = '🌫️';
+            adviceText = pickRandom([
+              'Dışarıda sis var. Lütfen trafikte, yolculukta dikkatli olun ve maskenizi takın.',
+              'Hava hayli puslu. Kirli havaya karşı varsa N95/FFP2 maske kullanımı önerilir.'
+            ]);
           }
           else if ([51, 53, 55, 56, 57].includes(code)) {
-            icon = '🌦️'; adviceIcon = '🌂'; adviceText = 'Çiseleyen yağmur dışarıyı ferahlatıyor. Hafif yağmurluğunuzu yanınıza almanızda fayda var.';
+            icon = '🌦️'; adviceIcon = '🌂';
+            adviceText = pickRandom([
+              'Çiseleyen yağmur dışarıyı ferahlatıyor. Hafif yağmurluğunuzu yanınıza almanızda fayda var.',
+              'Aralıklı çisenti var, saçlarınızın ıslanmasını önlemek için ceketinizin kapüşonunu kullanın.'
+            ]);
           }
           else if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) {
-            icon = '🌧️'; adviceIcon = '☔'; adviceText = 'Yağmurlu bir gün. Şemsiyenizi almayı unutmayın ve üşütmemeye dikkat edin.';
+            icon = '🌧️'; adviceIcon = '☔';
+            adviceText = pickRandom([
+              'Yağmurlu bir gün. Şemsiyenizi almayı unutmayın ve ayaklarınızı kuru tutun!',
+              'Yağmura yakalanmamak için şemsiyeniz yanınızda olsun. Islanan ayakkabılar hastalıklara davetiye çıkarabilir.',
+              'Hava oldukça yağışlı. C vitamini içeren taze meyveler tüketmek bağışıklığınıza yardımcı olur.'
+            ]);
           }
           else if ([71, 73, 75, 77, 85, 86].includes(code)) {
-            icon = '❄️'; adviceIcon = '🧣'; adviceText = 'Kar yağışı var! Sıkı giyinin, atkınızı takın ve kaygan zeminlere dikkat edin.';
+            icon = '❄️'; adviceIcon = '🧣';
+            adviceText = pickRandom([
+              'Kar yağışı var! Sıkı giyinin, atkınızı takın ve kaygan zeminlere dikkat edin.',
+              'Zeminler buzlu olabilir! Yürürken kaymaz tabanlı ayakkabılar tercih etmenizi öneririz.',
+              'Güzel bir kar manzarası... Vücut ısınızı korumak için kat kat giyinmeyi unutmayın.'
+            ]);
           }
           else if ([95, 96, 99].includes(code)) {
-            icon = '⛈️'; adviceIcon = '⚡'; adviceText = 'Fırtına bekleniyor. Zorunlu olmadıkça dışarı çıkmamanız tavsiye olunur, güvende kalın.';
+            icon = '⛈️'; adviceIcon = '⚡';
+            adviceText = pickRandom([
+              'Fırtına bekleniyor. Zorunlu olmadıkça dışarı çıkmamanız tavsiye olunur, güvende kalın.',
+              'Gök gürültülü sağanak var! Ağaç altı alanlardan uzak durun ve kendinizi koruyun.'
+            ]);
           }
 
-          // Akıllı Sıcaklık Tavsiyeleri
+          // Akıllı Sıcaklık Eklemeleri (Hayati Uyarılar)
           if (temp < 5 && ![71, 73, 75, 77, 85, 86].includes(code)) {
-            adviceText += ' Havalar çok soğuk, bağışıklığınızı güçlü tutmayı unutmayın!';
+            adviceText += ' Havalar çok soğuk, lütfen mevsime göre kalın giyinin.';
           } else if (temp > 30) {
-            adviceText += ' Sıcak havada bol su içmeyi ihmal etmeyin.';
+            adviceText += ' Sıcaktan korunmak için gölge yerleri tercih edin ve bol sıvı alın.';
           } else if (temp >= 20 && temp <= 27 && [0, 1, 2].includes(code)) {
-            adviceText += ' Tam yürüyüş veya hafif egzersiz havası!';
+            adviceText += ' Tam yürüyüş, spor ve açık hava egzersizi havası!';
           }
 
           document.getElementById('w_temp').textContent = temp + '°C';
