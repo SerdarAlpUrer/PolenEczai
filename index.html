@@ -1769,6 +1769,15 @@
     body.layout-dense .qrbox { width: 75px; height: 75px; }
     body.layout-dense .hpolen { font-size: 22px; }
     body.layout-dense header { height: 80px; }
+
+    /* ── ANIMASYONLARI KAPATMA ── */
+    body.no-animations, 
+    body.no-animations *,
+    body.no-animations *::before,
+    body.no-animations *::after {
+      transition: none !important;
+      animation: none !important;
+    }
   </style>
 </head>
 
@@ -1884,6 +1893,10 @@
         <div class="sp-row">
           <div class="sp-label">Nöbetçi Uyarı Efekti<small>Biz nöbetçiysek ekran kırmızı yanıp söner</small></div><label
             class="toggle"><input type="checkbox" id="sDutyAlert"><span class="slider"></span></label>
+        </div>
+        <div class="sp-row">
+          <div class="sp-label">Animasyonlar<small>Tüm geçiş ve efektleri kapatır</small></div><label
+            class="toggle"><input type="checkbox" id="sAnimations"><span class="slider"></span></label>
         </div>
       </div>
 
@@ -2557,7 +2570,8 @@
     const DEFAULTS = {
       theme: 'modern', sidebarOn: true,
       fsAd: false, weatherOn: true, dutyAlert: true,
-      autoScroll: false, scrollSpeed: 'medium'
+      autoScroll: false, scrollSpeed: 'medium',
+      animationsOn: true
     };
 
     function loadSettings() {
@@ -2583,6 +2597,7 @@
       document.getElementById('sDutyAlert').checked = s.dutyAlert;
       document.getElementById('sScroll').checked = s.autoScroll;
       document.getElementById('sScrollSpeed').value = s.scrollSpeed;
+      if (document.getElementById('sAnimations')) document.getElementById('sAnimations').checked = s.animationsOn !== false;
     }
 
     // ── UI'dan ayarları oku ──
@@ -2595,6 +2610,8 @@
         dutyAlert: document.getElementById('sDutyAlert').checked,
         autoScroll: document.getElementById('sScroll').checked,
         scrollSpeed: document.getElementById('sScrollSpeed').value,
+        animationsOn: document.getElementById('sAnimations').checked,
+        campList: settings.campList || []
       };
     }
 
@@ -2602,6 +2619,9 @@
     function applySettings(s) {
       // Tema Uygula
       document.body.setAttribute('data-theme', s.theme || 'modern');
+
+      // Animasyonları Kapat/Aç
+      document.body.classList.toggle('no-animations', s.animationsOn === false);
 
       if (scrollInterval) { clearInterval(scrollInterval); scrollInterval = null; }
       if (s.autoScroll) { startAutoScroll(s.scrollSpeed); }
