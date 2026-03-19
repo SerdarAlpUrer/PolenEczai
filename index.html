@@ -2003,7 +2003,7 @@
         let data = [];
 
         // Her eczane karti ".nobetci" sinifli bir div icinde
-        const kartlar = doc.querySelectorAll('.nobetci');
+        const kartlar = doc.querySelectorAll('.nobetci, .nobetcig');
 
         // Eger .nobetci bloklari bulunamazsa, h4 bazli fallback dene
         if (kartlar.length === 0) {
@@ -2076,6 +2076,15 @@
               const parts = rawText.split(' - ');
               ad = parts[0].trim();
               ilce = parts[1].trim();
+            } else {
+              // Gündüz nöbet kartlarında ayraç yok: "ARCADIA ECZANESİMERKEZ-ODUNPAZARI"
+              const eIdx = rawText.search(/ECZANESİ/i);
+              if (eIdx !== -1) {
+                const afterEcz = eIdx + 'ECZANESİ'.length;
+                ad = rawText.substring(0, afterEcz).trim();
+                const rest = rawText.substring(afterEcz).trim();
+                if (rest.length > 0) ilce = rest;
+              }
             }
 
             // Blacklist: cerez, gizlilik vs.
