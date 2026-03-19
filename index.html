@@ -65,18 +65,33 @@
 
     /* ── DINAMIK ARKA PLAN ── */
     body.weather-snow {
-      background-color: #f1f5f9;
-      background-image: radial-gradient(rgba(148, 163, 184, 0.1) 1px, transparent 1px), linear-gradient(180deg, rgba(226, 232, 240, 0.7) 0%, #f1f5f9 100%);
+      background-color: #e2e8f0;
+      background-image: radial-gradient(white 1px, transparent 1px), linear-gradient(180deg, #cbd5e1 0%, #f1f5f9 100%);
+      background-size: 50px 50px, 100% 100%;
     }
 
     body.weather-rain {
-      background-color: #f0fdfa;
-      background-image: radial-gradient(rgba(20, 184, 166, 0.05) 1px, transparent 1px), linear-gradient(to bottom, #ccfbf1, #f0fdfa);
+      background-color: #1e293b;
+      background-image: linear-gradient(to bottom, #0f172a, #1e293b);
+      color: #f8fafc;
+    }
+    body.weather-rain .glass-bg,
+    body.weather-rain header,
+    body.weather-rain .card,
+    body.weather-rain .side-card {
+      background: rgba(30, 41, 59, 0.8) !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    body.weather-rain .cname,
+    body.weather-rain .hpolen,
+    body.weather-rain .hpolen em,
+    body.weather-rain .side-card h3 {
+      color: #fff !important;
     }
 
     body.weather-clear {
       background-color: #fffbeb;
-      background-image: radial-gradient(rgba(245, 158, 11, 0.04) 1px, transparent 1px), radial-gradient(circle at top right, rgba(253, 230, 138, 0.6), transparent 50%);
+      background-image: radial-gradient(rgba(245, 158, 11, 0.08) 1px, transparent 1px), radial-gradient(circle at top right, rgba(253, 230, 138, 0.6), transparent 50%);
     }
 
     body.we-are-onduty {
@@ -1782,6 +1797,7 @@
 </head>
 
 <body>
+  <div id="weatherEffectLayer"></div>
   <div id="fsAdOverlay" class="fs-layer">
     <div class="fs-img" id="fsAdImg"></div>
     <div class="fs-content">
@@ -1955,38 +1971,7 @@
     }
     tick(); setInterval(tick, 10000);
 
-    // ── HAVA DURUMU & DİNAMİK ARKA PLAN ──────────────────────────────────────
-    function getWeatherIconAndClass(code) {
-      if (code === 0) return ['☀️', 'weather-clear'];
-      if (code === 1 || code === 2 || code === 3) return ['⛅', ''];
-      if (code >= 40 && code <= 49) return ['🌫️', ''];
-      if ((code >= 50 && code <= 69) || (code >= 80 && code <= 82)) return ['🌧️', 'weather-rain'];
-      if ((code >= 70 && code <= 79) || (code >= 85 && code <= 86)) return ['🌨️', 'weather-snow'];
-      if (code >= 90 && code <= 99) return ['⛈️', 'weather-rain'];
-      return ['🌤️', ''];
-    }
 
-    async function fetchWeather() {
-      if (!settings.weatherOn) return;
-      try {
-        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=39.7582&longitude=30.5144&current_weather=true&timezone=auto');
-        const data = await res.json();
-        if (data.current_weather) {
-          const temp = Math.round(data.current_weather.temperature);
-          const [icon, bgClass] = getWeatherIconAndClass(data.current_weather.weathercode);
-
-          document.getElementById('w_icon').textContent = icon;
-          document.getElementById('w_temp').textContent = temp + '°C';
-
-          document.body.classList.remove('weather-snow', 'weather-rain', 'weather-clear');
-          if (bgClass) document.body.classList.add(bgClass);
-        }
-      } catch (err) {
-        console.error('Hava durumu alınamadı:', err);
-      }
-    }
-    fetchWeather();
-    setInterval(fetchWeather, 30 * 60 * 1000);
 
 
     // ── QR ──────────────────────────────────────────────────────────────────────
@@ -2458,8 +2443,16 @@
     veriGetir();
     setInterval(() => veriGetir(true), 30 * 60 * 1000);
 
-    // ── CANLI HAVA DURUMU ──────────────────────────────────────────────
+    // ── CANLI HAVA DURUMU & GÖRSEL EFEKTLER ──────────────────────────────────
     async function fetchWeather() {
+      if (!settings.weatherOn) {
+        document.getElementById('weather').style.display = 'none';
+        document.getElementById('weatherAdvice').style.display = 'none';
+        document.getElementById('weatherEffectLayer').innerHTML = '';
+        document.body.classList.remove('weather-snow', 'weather-rain', 'weather-clear');
+        return;
+      }
+
       try {
         const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=39.767564&longitude=30.505898&current_weather=true&timezone=Europe/Istanbul');
         const data = await res.json();
@@ -2467,97 +2460,103 @@
           const temp = Math.round(data.current_weather.temperature);
           const code = data.current_weather.weathercode;
 
-          // Rastgele tavsiye secmek icin yardimci
-          const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+          // Arkaplan Sınıfları ve İkon Belirleme
+          let bgClass = '';
+          let icon = '🌤️';
+          if (code === 0) { icon = '☀️'; bgClass = 'weather-clear'; }
+          else if ([1, 2, 3].includes(code)) { icon = '⛅'; }
+          else if (code >= 40 && code <= 49) { icon = '🌫️'; }
+          else if ((code >= 50 && code <= 69) || (code >= 80 && code <= 82)) { icon = '🌧️'; bgClass = 'weather-rain'; }
+          else if ((code >= 70 && code <= 79) || (code >= 85 && code <= 86)) { icon = '🌨️'; bgClass = 'weather-snow'; }
+          else if (code >= 90 && code <= 99) { icon = '⛈️'; bgClass = 'weather-rain'; }
 
-          let icon = '☁️';
-          let adviceText = 'Sağlıklı günler dileriz!';
-          let adviceIcon = '🌟';
-
-          // ── HAVA DURUMUNA GORE TAVSİYELER (Rastgele Seçim) ──
-          if (code === 0) {
-            icon = '☀️'; adviceIcon = '🧴';
-            adviceText = pickRandom([
-              'Güneşli günlerde UV ışınlarına karşı cildinizi korumak için cilt tipinize uygun güneş kremlerini eczanemizden temin edebilirsiniz.',
-              'Güneşin tadını çıkarırken cilt lekelerine karşı dermokozmetik güneş koruyucularımızı incelemeyi unutmayın.',
-              'Güneşli havalarda sıvı ve mineral kaybına karşı elektrolit desteklerini ve nemlendiricileri eczanemize danışabilirsiniz.'
-            ]);
-          }
-          else if (code === 1 || code === 2) {
-            icon = '🌤️'; adviceIcon = '💊';
-            adviceText = pickRandom([
-              'Hava parçalı bulutlu. Mevsim geçişlerinde bağışıklığınızı destekleyecek multivitamin kompleksleri için bize danışabilirsiniz.',
-              'Günlük enerjinizi artırmak ve yorgunluğunuzu azaltmak için D vitamini ve Omega-3 desteklerini eczanemizden sorabilirsiniz.',
-              'Bahar veya hafif esintili günlerde cilt kuruluğuna karşı en iyi dermokozmetik nemlendiriciler eczanemizde.'
-            ]);
-          }
-          else if (code === 3) {
-            icon = '🌥️'; adviceIcon = '💧';
-            adviceText = pickRandom([
-              'Güneşsiz günlerde D vitamini sentezi düşer. Günlük D vitamini ihtiyacınız ve uygun takviyeler için eczacınıza danışın.',
-              'Kapalı havalarda düşen enerjinizi C vitamini ve Magnezyum efervesan tabletleri ile doğal olarak destekleyebilirsiniz.',
-              'Bulutlu ve serin havalarda eklem ağrılarınız artabilir. Rahatlatıcı krem ve jeller için eczanemizi ziyaret edebilirsiniz.'
-            ]);
-          }
-          else if ([45, 48].includes(code)) {
-            icon = '🌫️'; adviceIcon = '😷';
-            adviceText = pickRandom([
-              'Sisli ve puslu havalarda hava kirliliği artar. Polen ve toz alerjinize karşı koruyucu maske, burun spreyi ve göz damlalarını eczanemizden alabilirsiniz.',
-              'Hava oldukça puslu. Solunum yollarınızı rahatlatacak boğaz pastilleri ve burun spreyleri eczanemizde mevcuttur.'
-            ]);
-          }
-          else if ([51, 53, 55, 56, 57].includes(code)) {
-            icon = '🌦️'; adviceIcon = '🛡️';
-            adviceText = pickRandom([
-              'Çiseleyen yağmur sonrası soğuk algınlığına yakalanmamak için pastil ve C vitamini takviyelerinizi eczanemizden tamamlayabilirsiniz.',
-              'Mevsimsel yağışlar bağışıklık testidir. Propolis, Çinko ve Sambucus Nigra (Kara Mürver) takviyeleriyle korunmaya bugünden başlayın.'
-            ]);
-          }
-          else if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) {
-            icon = '🌧️'; adviceIcon = '🤧';
-            adviceText = pickRandom([
-              'Yağmurlu günlerde ıslanıp üşütmeye karşı; boğaz ağrısı ve öksürük şurupları ile ilk yardım çantanızı tazeleyin.',
-              'Soğuk algınlığı belirtileri hissediyorsanız; bitkisel çaylar, pastiller ve ıhlamur preperatları için eczanemize bekleriz.',
-              'Yağışlı ve soğuk havalarda hastalıklardan korunmak için güvendiğiniz multivitaminleri eczacınızdan isteyiniz.'
-            ]);
-          }
-          else if ([71, 73, 75, 77, 85, 86].includes(code)) {
-            icon = '❄️'; adviceIcon = '🩹';
-            adviceText = pickRandom([
-              'Kar yağışlı havalarda soğuktan çatlayan dudaklar ve kuruyan ciltler için yoğun nemlendirici bakım kremleri eczanemizde.',
-              'Buzlu zeminlerde yaşanabilecek ufak kazalara karşı; kas gevşetici kremler, ağrı bantları ve ilk yardım malzemelerinizi hazır bulundurun.',
-              'Dondurucu soğuklarda vücut direnciniz düşmesin. En kaliteli propolis ve beta-glukan destekleri için bize danışın.'
-            ]);
-          }
-          else if ([95, 96, 99].includes(code)) {
-            icon = '⛈️'; adviceIcon = '⚕️';
-            adviceText = pickRandom([
-              'Fırtınalı havalarda baş ve eklem ağrılarınız tetiklenebilir. Ağrı kesici ve magnezyum ihtiyaçlarınız için nöbetçi eczaneniz yanınızda.',
-              'Sert hava koşullarında evdeki ilk yardım ve acil durum tıbbi malzemelerinizin (yara bandı, antiseptik vb.) tam olduğundan emin olun.'
-            ]);
-          }
-
-          // Akıllı Sıcaklık Eklemeleri (Hayati Uyarılar)
-          if (temp < 5 && ![71, 73, 75, 77, 85, 86].includes(code)) {
-            adviceText = '⚠️ ' + adviceText + ' Aşırı soğuklarda bağışıklık savaşçıları olan Çinko ve C Vitamini kombinasyonlarını ihmal etmeyin.';
-          } else if (temp > 30) {
-            adviceText = '⚠️ ' + adviceText + ' Aşırı sıcaklarda güneş yanığı, pişik ve terlemeye karşı pudra ve dermokozmetik çözümlerimiz için içeri buyurun.';
-          } else if (temp >= 20 && temp <= 27 && [0, 1, 2].includes(code)) {
-            adviceText += ' Tam yürüyüş, spor ve açık hava egzersizi havası! Enerjinizi koruyacak besin takviyelerini eczacınıza sorun.';
-          }
-
+          // UI Güncelleme
+          document.body.classList.remove('weather-snow', 'weather-rain', 'weather-clear');
+          if (bgClass) document.body.classList.add(bgClass);
           document.getElementById('w_temp').textContent = temp + '°C';
           document.getElementById('w_icon').textContent = icon;
+          document.getElementById('weather').style.display = 'flex';
 
-          const wa = document.getElementById('weatherAdvice');
-          if (wa) {
-            document.getElementById('waIcon').textContent = adviceIcon;
-            document.getElementById('waText').textContent = adviceText;
-            wa.style.display = 'flex';
-          }
+          // Tavsiye Metni
+          updateWeatherAdvice(code, temp);
+
+          // Görsel Efektler (Yağmur/Kar)
+          updateWeatherEffects(bgClass);
         }
       } catch (e) {
-        console.error('Hava durumu alinamadi:', e);
+        console.error('Hava durumu alınamadı:', e);
+      }
+    }
+
+    function updateWeatherAdvice(code, temp) {
+      const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      let adviceText = 'Sağlıklı günler dileriz!';
+      let adviceIcon = '🌟';
+
+      if (code === 0) {
+        adviceIcon = '🧴';
+        adviceText = pickRandom([
+          'Güneşli günlerde UV ışınlarına karşı cildinizi korumak için cilt tipinize uygun güneş kremlerini eczanemizden temin edebilirsiniz.',
+          'Güneşin tadını çıkarırken cilt lekelerine karşı dermokozmetik güneş koruyucularımızı incelemeyi unutmayın.',
+          'Güneşli havalarda sıvı ve mineral kaybına karşı elektrolit desteklerini ve nemlendiricileri eczanemize danışabilirsiniz.'
+        ]);
+      } else if ([1, 2].includes(code)) {
+        adviceIcon = '💊';
+        adviceText = pickRandom([
+          'Hava parçalı bulutlu. Mevsim geçişlerinde bağışıklığınızı destekleyecek multivitamin kompleksleri için bize danışabilirsiniz.',
+          'Günlük enerjinizi artırmak ve yorgunluğunuzu azaltmak için D vitamini ve Omega-3 desteklerini eczanemizden sorabilirsiniz.'
+        ]);
+      } else if (code === 3) {
+        adviceIcon = '💧';
+        adviceText = 'Güneşsiz günlerde D vitamini sentezi düşer. Günlük D vitamini ihtiyacınız için eczacınıza danışın.';
+      } else if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) {
+        adviceIcon = '🤧';
+        adviceText = pickRandom([
+          'Yağmurlu günlerde ıslanıp üşütmeye karşı; boğaz ağrısı ve öksürük şurupları için eczanemizi ziyaret edebilirsiniz.',
+          'Soğuk algınlığı belirtileri hissediyorsanız; bitkisel çaylar ve pastiller için eczanemize bekleriz.'
+        ]);
+      } else if ([71, 73, 75, 77, 85, 86].includes(code)) {
+        adviceIcon = '❄️';
+        adviceText = 'Kar yağışlı havalarda soğuktan çatlayan dudaklar ve kuruyan ciltler için yoğun nemlendiriciler eczanemizde.';
+      }
+
+      if (temp < 6) adviceText = '⚠️ ' + adviceText + ' Aşırı soğuklarda bağışıklık direncinizi yüksek tutun.';
+
+      const wa = document.getElementById('weatherAdvice');
+      if (wa) {
+        document.getElementById('waIcon').textContent = adviceIcon;
+        document.getElementById('waText').textContent = adviceText;
+        wa.style.display = 'flex';
+      }
+    }
+
+    function updateWeatherEffects(bgClass) {
+      const layer = document.getElementById('weatherEffectLayer');
+      layer.innerHTML = '';
+      if (!settings.animationsOn || !bgClass) return;
+
+      if (bgClass === 'weather-rain') {
+        for (let i = 0; i < 30; i++) {
+          const drop = document.createElement('div');
+          drop.className = 'raindrop';
+          drop.style.left = Math.random() * 100 + 'vw';
+          drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+          drop.style.animationDelay = Math.random() * 2 + 's';
+          layer.appendChild(drop);
+        }
+      } else if (bgClass === 'weather-snow') {
+        for (let i = 0; i < 30; i++) {
+          const flake = document.createElement('div');
+          flake.className = 'snowflake';
+          flake.style.left = Math.random() * 100 + 'vw';
+          const size = (Math.random() * 5 + 2) + 'px';
+          flake.style.width = size;
+          flake.style.height = size;
+          flake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+          flake.style.animationDelay = Math.random() * 5 + 's';
+          flake.style.opacity = Math.random();
+          layer.appendChild(flake);
+        }
       }
     }
     fetchWeather();
@@ -2788,6 +2787,8 @@
 
     // İlk yüklemede ayarları ve reklamları uygula
     applySettings(settings);
+    // Hava durumunu periyodik güncelle
+    setInterval(fetchWeather, 30 * 60 * 1000);
     setTimeout(injectAds, 2000); // Veriler yüklendikten sonra reklamları ekle
   </script>
 </body>
