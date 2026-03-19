@@ -2272,10 +2272,17 @@
           document.body.classList.remove('we-are-onduty');
         }
 
-        const lu = new Date();
-        const luStr = lu.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+        // Son Güncelleme bilgisini (JSON içindeki last_updated) kullan
+        let luStr = "--:--";
+        if (json.last_updated) {
+          const lDate = new Date(json.last_updated);
+          luStr = lDate.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+        } else {
+          const lu = new Date();
+          luStr = lu.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+        }
         const luEl = document.getElementById('last-updated');
-        luEl.innerHTML = 'Son Güncelleme: <em>' + luStr + '</em>';
+        luEl.innerHTML = 'Oda Verisi Güncelleme: <em>' + luStr + '</em>';
         luEl.style.display = 'flex';
 
         st.className = '';
@@ -2439,9 +2446,9 @@
       });
     }, 1000);
 
-    // ── BAŞLAT — Her 30 dakikada bir otomatik yenile ──────────────────
+    // -- BAŞLAT — Her 5 dakikada bir veri güncellemesini kontrol et ──
     veriGetir();
-    setInterval(() => veriGetir(true), 30 * 60 * 1000);
+    setInterval(() => veriGetir(true), 5 * 60 * 1000);
 
     // ── CANLI HAVA DURUMU & GÖRSEL EFEKTLER ──────────────────────────────────
     async function fetchWeather() {
@@ -2787,7 +2794,7 @@
 
     // İlk yüklemede ayarları ve reklamları uygula
     applySettings(settings);
-    // Hava durumunu periyodik güncelle
+    // Hava durumunu periyodik güncelle (30dk)
     setInterval(fetchWeather, 30 * 60 * 1000);
     setTimeout(injectAds, 2000); // Veriler yüklendikten sonra reklamları ekle
   </script>
