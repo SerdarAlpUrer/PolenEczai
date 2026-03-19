@@ -35,11 +35,11 @@
       --f-3xl: clamp(26px, 2.8vw, 36px);
 
       /* Spacing */
-      --s-xs: clamp(4px, .4vw, 6px);
-      --s-sm: clamp(8px, .8vw, 12px);
-      --s-md: clamp(12px, 1.2vw, 18px);
-      --s-lg: clamp(16px, 1.6vw, 24px);
-      --s-xl: clamp(20px, 2vw, 32px);
+      --s-xs: clamp(3px, .3vw, 5px);
+      --s-sm: clamp(6px, .6vw, 10px);
+      --s-md: clamp(8px, 1vw, 14px);
+      --s-lg: clamp(10px, 1.2vw, 16px);
+      --s-xl: clamp(12px, 1.4vw, 20px);
     }
 
     *,
@@ -424,8 +424,8 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 580px), 1fr));
-      gap: clamp(14px, 1.6vh, 24px);
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
+      gap: clamp(8px, 1vh, 14px);
       flex: 1;
     }
 
@@ -490,11 +490,11 @@
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
-      padding: clamp(12px, 1.5vh, 18px) clamp(14px, 1.5vw, 20px);
+      border-radius: clamp(10px, 1vw, 14px);
+      padding: clamp(8px, 1vh, 12px) clamp(10px, 1vw, 14px);
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 0 clamp(10px, 1vw, 16px);
+      gap: 0 clamp(6px, .8vw, 10px);
       position: relative;
       overflow: hidden;
       transition: all .35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -533,13 +533,13 @@
     .ci {
       display: flex;
       flex-direction: column;
-      gap: clamp(6px, .8vh, 10px);
+      gap: clamp(3px, .5vh, 6px);
       min-width: 0;
       justify-content: center;
     }
 
     .cname {
-      font-size: clamp(16px, 1.7vw, 22px);
+      font-size: clamp(14px, 1.4vw, 18px);
       font-weight: 800;
       line-height: 1.1;
       letter-spacing: -.5px;
@@ -568,18 +568,18 @@
     .chips {
       display: flex;
       flex-wrap: wrap;
-      gap: clamp(5px, .5vw, 8px);
-      margin-top: 4px;
+      gap: clamp(3px, .4vw, 6px);
+      margin-top: 2px;
     }
 
     .chip {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      font-size: clamp(10.5px, 1.05vw, 14px);
+      gap: 4px;
+      font-size: clamp(9.5px, .95vw, 12px);
       font-weight: 600;
-      padding: clamp(4px, .5vh, 7px) clamp(10px, .9vw, 14px);
-      border-radius: 6px;
+      padding: clamp(3px, .4vh, 5px) clamp(7px, .7vw, 10px);
+      border-radius: 5px;
     }
 
     .chip-t {
@@ -606,11 +606,11 @@
 
     .qrbox {
       background: #fff;
-      border-radius: clamp(8px, .8vw, 12px);
-      padding: clamp(4px, .4vw, 8px);
+      border-radius: clamp(6px, .6vw, 10px);
+      padding: clamp(3px, .3vw, 6px);
       box-shadow: 0 4px 16px rgba(0, 0, 0, .4);
-      width: clamp(75px, 8vw, 105px);
-      height: clamp(75px, 8vw, 105px);
+      width: clamp(60px, 6vw, 80px);
+      height: clamp(60px, 6vw, 80px);
       display: flex;
       align-items: center;
       justify-content: center;
