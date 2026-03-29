@@ -279,11 +279,14 @@
       border: 1px solid rgba(255, 255, 255, 0.07);
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
       display: flex;
+      min-height: clamp(54px, 6vh, 66px); /* Ensured same height for both */
+      box-sizing: border-box;
     }
 
     #clock {
       flex-direction: column;
       align-items: flex-end;
+      justify-content: center;
       padding: clamp(6px, 1vh, 8px) clamp(12px, 1.5vw, 18px);
       line-height: 1.15;
       text-align: right;
@@ -292,8 +295,9 @@
     #weather {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
-      padding: clamp(6px, 1vh, 8px) clamp(12px, 1.5vw, 18px); /* Unified with clock padding */
+      padding: clamp(6px, 1vh, 8px) clamp(12px, 1.5vw, 18px);
     }
 
     #headerQR {
@@ -1848,13 +1852,13 @@
         </div>
       </div>
       <div class="hright">
+        <div id="headerQR" title="Eskişehir Eczacı Odası Nöbetçi Listesi" onclick="window.open('https://www.eskisehireo.org.tr/eskisehir-nobetci-eczaneler', '_blank')"></div>
         <div class="live"><span class="ldot"></span>CANLI</div>
         <div class="spill" id="spill"><em>—</em> eczane</div>
 
         <button id="ybtn" onclick="veriGetir(true)" title="Yenile">⟳</button>
         <button id="pbtn" onclick="window.print()" title="Yazdır">🖨️</button>
         <button id="settingsBtn" onclick="openSettings()" title="Ayarlar">⚙️</button>
-        <div id="headerQR" title="Eskişehir Eczacı Odası Nöbetçi Listesi" onclick="window.open('https://www.eskisehireo.org.tr/eskisehir-nobetci-eczaneler', '_blank')"></div>
         <div id="weather" title="Eskişehir Odunpazarı Hava Durumu">
           <span id="w_icon">🌤️</span> <span id="w_temp">--°C</span>
         </div>
