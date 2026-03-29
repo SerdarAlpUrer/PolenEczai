@@ -290,9 +290,35 @@
     }
 
     #weather {
+      display: flex;
       align-items: center;
       gap: 8px;
-      padding: 0 clamp(12px, 1.5vw, 18px);
+      padding: clamp(6px, 1vh, 8px) clamp(12px, 1.5vw, 18px); /* Unified with clock padding */
+    }
+
+    #headerQR {
+      background: #fff;
+      padding: 4px;
+      border-radius: 8px;
+      width: clamp(46px, 5vw, 64px);
+      height: clamp(46px, 5vw, 64px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      flex-shrink: 0;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    #headerQR:hover {
+      transform: scale(1.1);
+    }
+
+    #headerQR canvas,
+    #headerQR img {
+      width: 100%;
+      height: 100%;
     }
 
     #clock .c-date {
@@ -1828,6 +1854,7 @@
         <button id="ybtn" onclick="veriGetir(true)" title="Yenile">⟳</button>
         <button id="pbtn" onclick="window.print()" title="Yazdır">🖨️</button>
         <button id="settingsBtn" onclick="openSettings()" title="Ayarlar">⚙️</button>
+        <div id="headerQR" title="Eskişehir Eczacı Odası Nöbetçi Listesi" onclick="window.open('https://www.eskisehireo.org.tr/eskisehir-nobetci-eczaneler', '_blank')"></div>
         <div id="weather" title="Eskişehir Odunpazarı Hava Durumu">
           <span id="w_icon">🌤️</span> <span id="w_temp">--°C</span>
         </div>
@@ -2792,8 +2819,9 @@
 
     renderCampList();
 
-    // İlk yüklemede ayarları ve reklamları uygula
+    // İlk yüklemede ayarları, reklamları ve üst bar QR kodunu uygula
     applySettings(settings);
+    makeQR(document.getElementById('headerQR'), 'https://www.eskisehireo.org.tr/eskisehir-nobetci-eczaneler');
     // Hava durumunu periyodik güncelle (30dk)
     setInterval(fetchWeather, 30 * 60 * 1000);
     setTimeout(injectAds, 2000); // Veriler yüklendikten sonra reklamları ekle
