@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.ipynb_checkpoints
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+venv/
+.venv/
+env/
+.env
+
+# JavaScript (if any)
+node_modules/
+.DS_Store
+
+# IDEs & Agents
+.vscode/
+.idea/
+.gemini/
+.agent/
+*.swp
+*.swo
+
+# Temp & Logs (data.json MUST remain tracked for GitHub Pages!)
+*.tmp
+logs/
+*.log

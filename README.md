@@ -1,24 +1,24 @@
 # Polen Eczanesi Nöbetçi Eczane Ekranı 🌙💊
 
-Eskişehir Eczacı Odası verilerini kullanarak, Polen Eczanesi için özel olarak hazırlanmış modern, hızlı ve şık bir nöbetçi eczane bilgi ekranı projesidir.
+Eskişehir Eczacı Odası verilerini kullanarak **Polen Eczanesi** vitrin ekranı (Xiaomi TV Box S 4K / Kiosk) ve hasta cep telefonları için özel olarak tasarlanmış, kesintisiz çalışan nöbetçi eczane bilgi sistemidir.
 
-## ✨ Özellikler
+## ✨ Temel Özellikler
 
-- **Canlı ve Güncel Veri:** Eskişehir Eczacı Odası'ndan anlık olarak nöbetçi eczaneleri çeker.
-- **Modern Arayüz (Glassmorphism):** Koyu tema (Dark Mode), cam efekti (Glassmorphism) ve şık renk geçişleriyle göze hitap eden premium bir tasarım.
-- **Otomatik QR Kod Üretimi:** Eczane lokasyonlarını haritada kolayca bulabilmek için navigasyon linkli QR kodlar otomatik oluşturulur. Her eczane kendine ait bir QR koda sahiptir.
-- **Hava Durumu ve Saat:** Ekranın sağ üst köşesinde canlı saat ve Eskişehir için hava durumu bilgisi gömülüdür.
-- **Yazdırma Modu (Print Uyumlu):** Sayfayı yazdırırken arka plan efektlerini, gereksiz butonları gizler ve eczane listesini temiz, kağıt tasarrufu sağlayan bir formatta A4 çıktısına uygun hale getirir.
-- **Python Yerel Sunucu ve Scraper:** CORS engellerine takılmadan veriyi lokal ağdaki cihazlara (tablet, kiosk vb.) iletmek için hafif bir Python HTTP API (`server.py`) ve veri kaydedici (`scraper.py`) barındırır.
+- **5 Günlük İleri Takvim + Canlı Veri (Sıfır Kesinti):** `scraper.py` hem anlık nöbet listesini hem de önümüzdeki 5 günün Eskişehir Merkez (`Odunpazarı` & `Tepebaşı`) vardiya takvimini çeker. Zamanlanmış görevler gecikse bile ekran sabah `08:30` ve akşam `18:30` vardiya geçişlerini saniyesi saniyesine otomatik yapar.
+- **3 Katmanlı Veri Yedeklemesi (Auto-Failover):** Yerel API (`/api/pharmacies`) → Statik Takvim (`data.json`) → Canlı Yedek Vekil (`r.jina.ai`) sırasıyla çalışır; veri eskiyse ekranda açık bilgilendirme şeridi gösterir.
+- **Gerçek Yürüme (`🚶`) ve Araç (`🚗`) Süresi + Canlı Harita Rotası:** Polen Eczanesi konumundan yakın eczaneler için gerçek yaya yürüyüş süresini ve mesafesini, uzak eczaneler için araç süresini hesaplar ve harita üzerinde yol rotasını çizer.
+- **Yarı Nöbet ve Kapanış Uyarısı:** Gece yarısı veya erken saatte nöbeti bitecek eczaneleri ve kapanmasına 60 dakikadan az kalan nöbetçileri (`⏳ Kapanmasına X dk kaldı`) otomatik işaretler.
+- **İlçe Hızlı Filtresi & Mobil "Cebe Al" Görünümü (`?mobil=1`):** Vitrindeki QR kodu okutan hastalar, kendi telefonlarında tek dokunuşla **Hemen Ara** ve **Yol Tarifi Al** butonlarıyla listeyi kullanabilir.
+- **4K TV, Kiosk ve A4 Yazdırma Desteği:** Xiaomi TV kumandası (D-Pad odaklanma), açık/koyu tema, hava durumu tavsiyeleri, kampanya alanı ve A4 çıktı formatı içerir.
 
 ## 🚀 Kurulum ve Kullanım
 
-1. Bilgisayarınızda **Python 3.x** kurulu olduğundan emin olun.
-2. Proje dizininde gerekli kütüphaneleri (varsa) kurun ve terminalden sunucuyu başlatın:
-   ```bash
-   python server.py
-   ```
-3. Terminalde gösterilen `http://<LOKAL_IP_ADRESI>:5050` (örneğin `http://192.168.1.x:5050`) adresini kullanarak tabletinizden veya kiosk cihazınızdan sisteme bağlanın.
-4. (Opsiyonel) Eğer veriyi statik bir `.json` olarak saklamak isterseniz `python scraper.py` dosyasını çalıştırabilirsiniz.
+Harici hiçbir `pip` paketi gerektirmez (yalnızca Python 3.10+ standart kütüphanesi):
 
-Bu sistem Eczane içindeki vitrin tabletleri ve bilgilendirme ekranları için tasarlanmıştır. Herkese kolaylıklar dileriz!
+```bash
+# Veriyi manuel güncellemek için:
+py scraper.py
+
+# Yerel ağda sunucuyu başlatmak için (http://localhost:5050):
+py server.py
+```
