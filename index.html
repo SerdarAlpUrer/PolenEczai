@@ -45,21 +45,13 @@
           </svg>
         </div>
         <div>
-          <div class="hpolen"><em>Polen</em>&nbsp;Eczanesi</div>
-          <div class="hpolen-addr">Vişnelik Mah. Atatürk Bulvarı · Eskişehir Merkez</div>
-          <div class="htitle"><span class="htitle-dot"></span>Nöbetçi Eczaneler</div>
+          <div class="hpolen"><em>Polen</em>&nbsp;Eczanesi <span class="htitle-badge"><span class="htitle-dot"></span>Nöbetçi Eczaneler</span></div>
+          <div class="hpolen-addr">Vişnelik · Eskişehir Merkez</div>
         </div>
       </div>
 
-      <!-- District Quick Filter Bar (Touch, Mobile & TV D-Pad Friendly) -->
-      <div class="filter-bar" id="filterBar" role="tablist" aria-label="İlçe Filtresi">
-        <button type="button" class="fbtn active" data-district="ALL" onclick="setDistrictFilter('ALL')">Tümü</button>
-        <button type="button" class="fbtn" data-district="ODUNPAZARI" onclick="setDistrictFilter('ODUNPAZARI')">Odunpazarı</button>
-        <button type="button" class="fbtn" data-district="TEPEBAŞI" onclick="setDistrictFilter('TEPEBAŞI')">Tepebaşı</button>
-        <button type="button" class="fbtn mobile-map-btn" id="mobileMapBtn" onclick="toggleMobileMap()">🗺️ Harita</button>
-      </div>
-
       <div class="hright">
+        <button type="button" class="mobile-map-btn" id="mobileMapBtn" onclick="toggleMobileMap()">🗺️ Harita</button>
         <div class="live" id="liveBadge"><span class="ldot"></span><span id="liveText">CANLI</span></div>
         <div class="spill" id="spill"><em>—</em> eczane</div>
 
@@ -89,14 +81,16 @@
       <!-- Right Sidebar (QR + Map) -->
       <div class="side-col" id="sideCol">
         <div class="side-card qr-side-card">
-          <h3>📱 Listeyi Telefonuna Al</h3>
-          <p>Dışarıda beklerken zaman kaybetmeyin. QR kodu okutup mesafe sıralı listeyi ve yol tarifini cebinizde açın.</p>
+          <div class="qr-side-text">
+            <h3>📱 Cebe İndir</h3>
+            <p>QR okutarak listeyi ve yol tarifini telefonunuzda açın.</p>
+          </div>
           <div class="takeaway-qr" id="takeawayQR"></div>
         </div>
         <div class="side-card map-side-card" style="flex: 1; padding: 12px;">
           <div class="map-head">
             <h3>📍 Nöbetçi Haritası</h3>
-            <small id="mapRouteHint">Bir eczane seçerek rotayı görün</small>
+            <small id="mapRouteHint">Rota için eczane seçin</small>
           </div>
           <div id="liveMap"></div>
         </div>
@@ -110,11 +104,8 @@
     </div>
 
     <footer>
-      <span class="footer-text">Bu yazılım <em>Polen Eczanesi</em> için Özel Olarak Yapılmıştır &nbsp;·&nbsp; Eskişehir Merkez Nöbetçi Eczane Listesi</span>
-      <span class="footer-sep">|</span>
-      <span class="footer-disc">⚠ Veriler Eskişehir Eczacı Odası listesinden otomatik alınmaktadır. Gitmeden önce telefonla teyit etmeniz önerilir.</span>
-      <span class="footer-sep">|</span>
-      <span id="last-updated" class="footer-disc" style="display: none; opacity: 0.75;">Son Güncelleme: <em>--:--</em></span>
+      <span class="footer-text"><em>Polen Eczanesi</em> · Veriler Eskişehir Eczacı Odası'ndan alınır; gitmeden telefonla teyit ediniz.</span>
+      <span id="last-updated" class="footer-disc" style="display: none;">Güncelleme: <em>--:--</em></span>
     </footer>
   </div>
 
